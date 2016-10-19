@@ -15,16 +15,6 @@ struct Vector3f : public fmVector<Vector3f>
     real y;
     real z;
 
-    static const Vector3f ZERO;
-    static const Vector3f UNIT_X;
-    static const Vector3f UNIT_Y;
-    static const Vector3f UNIT_Z;
-    static const Vector3f NEGATIVE_UNIT_X;
-    static const Vector3f NEGATIVE_UNIT_Y;
-    static const Vector3f NEGATIVE_UNIT_Z;
-    static const Vector3f UNIT_SCALE;
-
-
     inline Vector3f()
     {}
 
@@ -171,6 +161,14 @@ struct Vector3f : public fmVector<Vector3f>
 
 
 
+    static const Vector3f ZERO;
+    static const Vector3f UNIT_X;
+    static const Vector3f UNIT_Y;
+    static const Vector3f UNIT_Z;
+    static const Vector3f NEGATIVE_UNIT_X;
+    static const Vector3f NEGATIVE_UNIT_Y;
+    static const Vector3f NEGATIVE_UNIT_Z;
+    static const Vector3f UNIT_SCALE;
 
 };
 
