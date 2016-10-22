@@ -1,27 +1,19 @@
 cmake_minimum_required(VERSION 3.0)
-set( CMAKE_VERBOSE_MAKEFILE	 1 )
+set( CMAKE_VERBOSE_MAKEFILE	 True	CACHE BOOL "Enable verbose makefile" FORCE )
 
 project( fmormath )
 
+set( FMOR_ENABLE_TESTS		False	CACHE BOOL 	"Enable tests" )
+set( FMOR_BUILD_STATIC		True	CACHE BOOL 	"Build static library" )
 
 
 #####################################
 ## Compilation
-
-enable_language( ASM )
 enable_language( CXX )
-enable_language( C )
 
-## C
-set( CMAKE_C_FLAGS              "-fPIC -std=c11 -Wall -Wno-psabi" 			)
-set( CMAKE_C_FLAGS_DEBUG        "-O0 -g -D_DEBUG_" )
-set( CMAKE_C_FLAGS_RELEASE      "O3" )
-
-
-## CXX
-set( CMAKE_CXX_FLAGS             "-fPIC -std=c++11 -Wall -fexceptions" )
-set( CMAKE_CXX_FLAGS_DEBUG       "-O0 -g -D_DEBUG_" )
-set( CMAKE_CXX_FLAGS_RELEASE     "-O3" )
+set( CMAKE_CXX_FLAGS             "${CMAKE_CXX_FLAGS} -fPIC -std=c++11 -Wall -fexceptions" )
+set( CMAKE_CXX_FLAGS_DEBUG       "${CMAKE_CXX_FLAGS_DEBUG} -O0 -g -D_DEBUG_" )
+set( CMAKE_CXX_FLAGS_RELEASE     "${CMAKE_CXX_FLAGS_RELEASE} -O3" )
 
 
 #######################
@@ -63,7 +55,6 @@ set( HEADERS
     src/vector2f.h
     src/vector3f.h
     src/vector4f.h
-    src/vectorfield.h
     src/fmormathvector.h
     src/fmormath.h
     src/nanoflann.hpp
@@ -87,14 +78,13 @@ set( SOURCES
     src/mortonnumber.cpp
     src/plane.cpp
     src/random.cpp
+    src/rectangle.cpp
     src/quaternion.cpp
     src/sorter.cpp
     src/vector2i.cpp
     src/vector2f.cpp
     src/vector3f.cpp
     src/vector4f.cpp
-    src/vectorfield.cpp
-    src/rectangle.cpp
 )
 
 
@@ -117,19 +107,26 @@ set( TEST_SOURCES
 )
 
 add_custom_target( headers SOURCES ${HEADERS} ${EXTERNALS_HEADERS} ${SCRIPTS} )
-add_library(     fmormath_static STATIC ${SOURCES}  )
+
 add_library(     fmormath SHARED ${SOURCES}  )
 
 install( FILES   ${HEADERS} DESTINATION "include/fmormath" )
-install( TARGETS fmormath_static ARCHIVE DESTINATION lib )
 install( TARGETS fmormath LIBRARY DESTINATION lib )
 
 
-# Tests
-find_package(GTest REQUIRED)
-add_executable( runtests ${TEST_SOURCES} )
-target_link_libraries(runtests fmormath ${GTEST_BOTH_LIBRARIES} pthread )
+if( FMOR_BUILD_STATIC )
+	add_library(     fmormath_static STATIC ${SOURCES}  )
+	install( TARGETS fmormath_static ARCHIVE DESTINATION lib )
+endif()
 
+
+# Tests
+if( FMOR_ENABLE_TESTS )
+    find_package(GTest REQUIRED)
+    add_executable( runtests ${TEST_SOURCES} )
+    target_include_directories( runtests PUBLIC ${GTEST_INCLUDE_DIR} )
+    target_link_libraries(runtests fmormath ${GTEST_BOTH_LIBRARIES} pthread )
+endif()
 
 
 

@@ -1,5 +1,6 @@
 #include "aabb.h"
 
+
 namespace fmormath {
 
 
@@ -8,21 +9,9 @@ static inline Vector3f Min( const Vector3f& v1, const Vector3f& v2 )
 {
     Vector3f min;
 
-    if( v1.x < v2.x )
-        min.x = v1.x;
-    else
-        min.x = v2.x;
-
-
-    if( v1.y < v2.y )
-        min.y = v1.y;
-    else
-        min.y = v2.y;
-
-    if( v1.z < v2.z )
-        min.z = v1.z;
-    else
-        min.z = v2.z;
+    min.x =  ( v1.x < v2.x ) ? v1.x : v2.x;
+    min.y =  ( v1.y < v2.y ) ? v1.y : v2.y;
+    min.z =  ( v1.z < v2.z ) ? v1.z : v2.z;
 
     return min;
 }
