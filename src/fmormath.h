@@ -3,7 +3,6 @@
 #include "mathtypes.h"
 
 
-#include "vector2i.h"
 
 #include "vector2f.h"
 #include "vector3f.h"
@@ -42,7 +41,6 @@
 #include "spacemap.h"
 #include "spacemap3d.h"
 
-#include "vectorfield.h"
 #include "sorter.h"
 
 

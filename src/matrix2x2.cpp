@@ -17,7 +17,7 @@ bool Matrix2x2::operator ==(const Matrix2x2 &other) const
     return true;
 }
 
-void Matrix2x2::operator *=( real f)
+void Matrix2x2::operator *=( Real f)
 {
     m_Reals[0][0] *= f;
     m_Reals[0][1] *= f;
@@ -61,7 +61,7 @@ Matrix2x2 Matrix2x2::operator *( const Matrix2x2& other ) const
     return result;
 }
 
-Matrix2x2 Matrix2x2::operator *(real r) const
+Matrix2x2 Matrix2x2::operator *( Real r) const
 {
     Matrix2x2 result;
     result[0][0] = m_Reals[0][0] * r;
@@ -99,17 +99,17 @@ Vector2f Matrix2x2::operator *(const Vector2f& v2 ) const
     return result;
 }
 
-float Matrix2x2::determinant() const
+Real Matrix2x2::determinant() const
 {
     return m_Reals[0][0]*m_Reals[1][1] - m_Reals[0][1]*m_Reals[1][0];
 }
 
 Matrix2x2 Matrix2x2::inverse() const
 {
-    const float det = m_Reals[0][0]*m_Reals[1][1] - m_Reals[0][1]*m_Reals[1][0];
+    const Real det = m_Reals[0][0]*m_Reals[1][1] - m_Reals[0][1]*m_Reals[1][0];
     if( det != 0.f )
     {
-        const float invDeterminant = 1.0f / det;
+        const Real invDeterminant = 1.0f / det;
         Matrix2x2 result;
         result.m_Reals[0][0] =   invDeterminant * m_Reals[1][1];
         result.m_Reals[0][1] = - invDeterminant * m_Reals[0][1];

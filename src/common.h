@@ -4,15 +4,13 @@
 
 namespace fmormath {
 
-
-
-float DegreeToRadian( float degree );
-float RadianToDegreee( float radian );
-
+Real DegreeToRadian( Real degree );
+Real RadianToDegreee( Real radian );
 
 u32 NextPowerOf2( u32 value );
 bool IsPowerOf2( int i);
-float Q_rsqrt( float number );
+Real Q_rsqrt( Real number );
+Real IsAlmostEqual( Real a, Real b );
 
 }
 

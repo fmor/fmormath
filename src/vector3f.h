@@ -2,83 +2,98 @@
 
 #include <cmath>
 
-#include "fmormathvector.h"
 #include "mathtypes.h"
 
 namespace fmormath {
 
 
 
-struct Vector3f : public fmVector<Vector3f>
+struct Vector3f
 {
-    real x;
-    real y;
-    real z;
+
+    union
+    {
+        Real data[3];
+        Real xyz[3];
+        Real rgb[3];
+
+        struct
+        {
+            Real x;
+            Real y;
+            Real z;
+        };
+
+        struct
+        {
+            Real r;
+            Real g;
+            Real b;
+        };
+
+    };
+
+
 
     inline Vector3f()
     {}
 
-    inline Vector3f( real _x, real _y, real _z ) :
+    inline Vector3f( Real _x, Real _y, Real _z ) :
         x( _x ),
         y( _y ),
         z( _z )
     {}
-    inline Vector3f( const Vector3f& other ) :
-        x( other.x ),
-        y( other.y ),
-        z( other.z )
-    {}
 
-    virtual inline bool operator ==( const Vector3f& other ) const final override
-    {
-        if( x != other.x ) return false;
-        if( y != other.y ) return false;
-        if( z != other.z ) return false;
-        return true;
+    inline Real operator[]( uint index ) const { return data[index]; }
 
-    }
-    virtual inline bool operator !=( const Vector3f& other ) const final override
+
+    bool operator ==( const Vector3f& other ) const;
+
+    inline bool operator !=( const Vector3f& other ) const
     {
         return !( *this == other );
     }
 
-    virtual inline void operator *=( real f) final override
+    inline void operator *=( Real f)
     {
         x *= f;
         y *= f;
         z *= f;
     }
-    virtual inline void operator /=( real f) final override
+    inline void operator /=( Real f)
     {
-        const real inv = 1.0 / f;
-        x *= inv;
-        y *= inv;
-        z *= inv;
+        if( f )
+        {
+            const Real inv = Real(1.0) / f;
+            x *= inv;
+            y *= inv;
+            z *= inv;
+        }
     }
-    virtual inline Vector3f operator *( real f) const final override
+    inline Vector3f operator *( Real f) const
     {
         Vector3f result;
-        result.x *= f;
-        result.y *= f;
-        result.z *= f;
+        result.x = x * f;
+        result.y = y * f;
+        result.z = z * f;
         return result;
     }
-    virtual inline Vector3f operator /( real f) const final override
+    inline Vector3f operator /( Real f) const
     {
         Vector3f result;
-        result.x /= f;
-        result.y /= f;
-        result.z /= f;
+        result.x = x / f;
+        result.y = y / f;
+        result.z = z / f;
         return result;
     }
 
-    virtual inline void operator +=( const Vector3f& other ) final override
+    inline void operator +=( const Vector3f& other )
     {
         x = x + other.x;
         y = y + other.y;
         z = z + other.z;
     }
-    virtual inline void operator -=( const Vector3f& other ) final override
+    inline void operator -=( const Vector3f& other )
     {
         x = x - other.x;
         y = y - other.y;
@@ -86,7 +101,7 @@ struct Vector3f : public fmVector<Vector3f>
     }
 
 
-    virtual inline Vector3f operator +( const Vector3f& other ) const final override
+    inline Vector3f operator +( const Vector3f& other ) const
     {
         Vector3f result;
         result.x = x + other.x;
@@ -94,7 +109,7 @@ struct Vector3f : public fmVector<Vector3f>
         result.z = z + other.z;
         return result;
     }
-    virtual inline Vector3f operator -( const Vector3f& other ) const final override
+    inline Vector3f operator -( const Vector3f& other ) const
     {
         Vector3f result;
         result.x = x - other.x;
@@ -102,7 +117,7 @@ struct Vector3f : public fmVector<Vector3f>
         result.z = z - other.z;
         return result;
     }
-    virtual inline Vector3f operator -() const final override
+    inline Vector3f operator -() const
     {
         Vector3f result;
         result.x = -x;
@@ -111,42 +126,32 @@ struct Vector3f : public fmVector<Vector3f>
         return result;
     }
 
-    inline void set( real _x, real _y, real _z )
+    inline void set( Real _x, Real _y, Real _z )
     {
         x = _x;
         y = _y;
         z = _z;
     }
 
-    virtual inline real dot( const Vector3f& other ) const final override
+    inline Real dot( const Vector3f& other ) const
     {
         return x*other.x + y*other.y + z*other.z;
     }
-    virtual inline real length() const final override
+    inline Real length() const
     {
         return std::sqrt( x*x + y*y + z*z );
     }
-    virtual inline real lengthSquared() const final override
+    inline Real lengthSquared() const
     {
         return ( x*x + y*y + z*z );
     }
-    virtual inline void  scale( const Vector3f& other ) final override
+    inline void  scale( const Vector3f& other )
     {
         x *= other.x;
         y *= other.y;
         z *= other.z;
     }
-    virtual inline void normalize() final override
-    {
-        const real len = std::sqrt( x*x + y*y + z*z);
-        if( len > 0.f )
-        {
-            const real invLen = 1.0f / len;
-            x *= invLen;
-            y *= invLen;
-            z *= invLen;
-        }
-    }
+    void normalize();
     inline Vector3f cross( const Vector3f& other ) const
     {
         return Vector3f( y*other.z-z*other.y, z*other.x-other.z*x, x*other.y-y*other.x );
@@ -155,8 +160,8 @@ struct Vector3f : public fmVector<Vector3f>
 
 
 
-    real angle( const Vector3f& other );
-    void rotate( real radian, const Vector3f& axis );
+    Real angle( const Vector3f& other );
+    void rotate( Real radian, const Vector3f& axis );
 
 
 
@@ -174,7 +179,7 @@ struct Vector3f : public fmVector<Vector3f>
 
 
 
-inline Vector3f operator*( real r, const Vector3f& v3 ) { return v3 * r; }
+inline Vector3f operator*( Real r, const Vector3f& v3 ) { return v3 * r; }
 
 
 }

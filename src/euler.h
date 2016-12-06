@@ -9,7 +9,7 @@ class euler
 {
 public:
 
-    static Vector3f RotateAroundAxis( const Vector3f& v3, real radian, const Vector3f& axis );
+    static Vector3f RotateAroundAxis( const Vector3f& v3, Real radian, const Vector3f& axis );
 
 };
 

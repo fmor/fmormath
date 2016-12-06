@@ -9,27 +9,21 @@ namespace fmormath {
 
 struct Quaternion
 {
-    real x;
-    real y;
-    real z;
-    real w;
+    Real x;
+    Real y;
+    Real z;
+    Real w;
 
     inline Quaternion()
     {}
 
-    inline Quaternion( real _w, real _x, real _y, real _z ) :
+    inline Quaternion( Real _w, Real _x, Real _y, Real _z ) :
         x( _x ),
         y( _y ),
         z( _z ),
         w( _w )
     {}
 
-    inline Quaternion( const Quaternion& other ) :
-        x( other.x ),
-        y( other.y ),
-        z( other.z ),
-        w( other.w )
-    {}
     inline Quaternion( const Vector3f& v3 ) :
         x( v3.x ),
         y( v3.y ),
@@ -45,7 +39,8 @@ struct Quaternion
         w( v4.w )
     {}
 
-    Quaternion( real radian, const Vector3f& axis );
+    Quaternion( Real radian, const Vector3f& axis );
+    Quaternion& fromAngleAxis( Real radian, const Vector3f& axis );
 
 
     bool operator ==( const Quaternion& other ) const;
@@ -66,7 +61,7 @@ struct Quaternion
     void operator *=( const Quaternion& other );
 
 
-    inline void set( real _w, real _x, real _y, real _z )
+    inline void set( Real _w, Real _x, Real _y, Real _z )
     {
         w = _w;
         x = _x;
@@ -78,10 +73,10 @@ struct Quaternion
 
     Quaternion conjugate() const;
     Quaternion inverse() const;
-    real norm() const;
-    real normSquared() const;
+    Real norm() const;
+    Real normSquared() const;
     void normalize();
-    real dot( const Quaternion& other ) const;
+    Real dot( const Quaternion& other ) const;
 
 
 

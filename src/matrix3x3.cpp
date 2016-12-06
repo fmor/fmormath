@@ -10,14 +10,14 @@ const Matrix3x3 Matrix3x3::IDENTITY( 1,0,0,
                                      0,1,0,
                                      0,0,1 );
 
-static inline float Minor( const Matrix3x3& matrix, uint r0, uint r1, uint c0, uint c1 )
+static inline Real Minor( const Matrix3x3& matrix, uint r0, uint r1, uint c0, uint c1 )
 {
     return ( matrix[r0][c0]*matrix[r1][c1] - matrix[r1][c0]*matrix[r0][c1] );
 }
 
-Matrix3x3::Matrix3x3( float r00, float r01, float r02,
-                          float r10, float r11, float r12,
-                          float r20, float r21, float r22)
+Matrix3x3::Matrix3x3( Real r00, Real r01, Real r02,
+                          Real r10, Real r11, Real r12,
+                          Real r20, Real r21, Real r22)
 {
     m_Reals[0][0] = r00;
     m_Reals[0][1] = r01;
@@ -33,9 +33,9 @@ Matrix3x3::Matrix3x3( float r00, float r01, float r02,
 
 }
 
-void Matrix3x3::set( float r00, float r01, float r02,
-                       float r10, float r11, float r12,
-                       float r20, float r21, float r22)
+void Matrix3x3::set( Real r00, Real r01, Real r02,
+                       Real r10, Real r11, Real r12,
+                       Real r20, Real r21, Real r22)
 {
  m_Reals[0][0] = r00;
  m_Reals[0][1] = r01;
@@ -69,7 +69,7 @@ bool Matrix3x3::operator ==(const Matrix3x3& other ) const
     return true;
 }
 
-void Matrix3x3::operator *=( float f )
+void Matrix3x3::operator *=( Real f )
 {
     m_Reals[0][0] *= f;
     m_Reals[0][1] *= f;
@@ -134,7 +134,7 @@ void Matrix3x3::operator -=(const Matrix3x3 &other)
     m_Reals[2][2] -= other.m_Reals[2][2];
 }
 
-Matrix3x3 Matrix3x3::operator *(float f) const
+Matrix3x3 Matrix3x3::operator *(Real f) const
 {
     Matrix3x3 result;
     result.m_Reals[0][0] = m_Reals[0][0]*f;
@@ -180,16 +180,54 @@ Matrix3x3 Matrix3x3::operator *(const Matrix3x3& other ) const
     return result;
 }
 
-
-
-float Matrix3x3::determinant() const
+Matrix3x3 Matrix3x3::operator +(const Matrix3x3 &other) const
 {
-//    float d = 0;
+    Matrix3x3 result;
+
+    result[0][0] = m_Reals[0][0] + other.m_Reals[0][0];
+    result[0][1] = m_Reals[0][1] + other.m_Reals[0][1];
+    result[0][2] = m_Reals[0][2] + other.m_Reals[0][2];
+
+    result[1][0] = m_Reals[1][0] + other.m_Reals[1][0];
+    result[1][1] = m_Reals[1][1] + other.m_Reals[1][1];
+    result[1][2] = m_Reals[1][2] + other.m_Reals[1][2];
+
+    result[2][0] = m_Reals[2][0] + other.m_Reals[2][0];
+    result[2][1] = m_Reals[2][1] + other.m_Reals[2][1];
+    result[2][2] = m_Reals[2][2] + other.m_Reals[2][2];
+
+    return result;
+}
+
+Matrix3x3 Matrix3x3::operator -(const Matrix3x3 &other) const
+{
+    Matrix3x3 result;
+
+    result[0][0] = m_Reals[0][0] - other.m_Reals[0][0];
+    result[0][1] = m_Reals[0][1] - other.m_Reals[0][1];
+    result[0][2] = m_Reals[0][2] - other.m_Reals[0][2];
+
+    result[1][0] = m_Reals[1][0] - other.m_Reals[1][0];
+    result[1][1] = m_Reals[1][1] - other.m_Reals[1][1];
+    result[1][2] = m_Reals[1][2] - other.m_Reals[1][2];
+
+    result[2][0] = m_Reals[2][0] - other.m_Reals[2][0];
+    result[2][1] = m_Reals[2][1] - other.m_Reals[2][1];
+    result[2][2] = m_Reals[2][2] - other.m_Reals[2][2];
+
+    return result;
+}
+
+
+
+Real Matrix3x3::determinant() const
+{
+//    Real d = 0;
 //    d += m_Reals[0][0]*m_Reals[1][1]*m_Reals[2][2] + m_Reals[0][1]*m_Reals[1][2]*m_Reals[2][0] + m_Reals[0][2]*m_Reals[1][0]*m_Reals[2][1];
 //    d -= m_Reals[0][0]*m_Reals[1][2]*m_Reals[2][1] + m_Reals[0][1]*m_Reals[1][0]*m_Reals[2][2] + m_Reals[0][2]*m_Reals[1][1]*m_Reals[2][0];
 //    return d;
 
-    float det = 0;
+    Real det = 0;
     det += m_Reals[0][0] * Minor( *this, 1, 2, 1, 2 );
     det -= m_Reals[0][1] * Minor( *this, 1, 2, 0, 2 );
     det += m_Reals[0][2] * Minor( *this, 1, 2, 0, 1 );
@@ -198,11 +236,11 @@ float Matrix3x3::determinant() const
 
 Matrix3x3 Matrix3x3::inverse() const
 {
-    float det = determinant();
+    Real det = determinant();
     if( det != 0.f )
     {
         Matrix3x3 result;
-        const float detInverse = 1.0f / det;
+        const Real detInverse = 1.0f / det;
 
         result.m_Reals[0][0] = Minor( *this, 1, 2, 1, 2 );
         result.m_Reals[0][1] = Minor( *this, 0, 2, 1, 2 ) * -1.0f;;

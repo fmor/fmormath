@@ -1,18 +1,21 @@
 #include "common.h"
+#include <cmath>
 
 #include "constants.h"
 
 namespace fmormath {
 
-float DegreeToRadian( float degree )
+Real DegreeToRadian( Real degree )
 {
-    float radian = degree * Constants::PI / 180.f;
+    static const Real R_PI_DIVBY_180 = Constants::PI / Real(180);
+    Real radian = degree * R_PI_DIVBY_180;
     return radian;
 }
 
-float RadianToDegreee(float radian)
+Real RadianToDegreee(Real radian)
 {
-    float degree = 180.0f * radian / Constants::PI;
+    static const Real R_180_DIVBY_PI = Real(180) / Constants::PI ;
+    Real degree = R_180_DIVBY_PI * radian;
     return degree;
 }
 
@@ -43,21 +46,36 @@ u32 NextPowerOf2( u32 value )
 
 
 // https://fr.wikipedia.org/wiki/Racine_carr%C3%A9e_inverse_rapide
-float Q_rsqrt( float number )
+Real Q_rsqrt( Real number )
 {
     long i;
-    float x2, y;
-    const float threehalfs = 1.5F;
+    Real x2, y;
+    const Real threehalfs = 1.5F;
 
     x2 = number * 0.5F;
     y  = number;
-    i  = * ( long * ) &y;                       // evil floating point bit level hacking
+    i  = * ( long * ) &y;                       // evil Realing point bit level hacking
     i  = 0x5f3759df - ( i >> 1 );               // what the fuck?
-    y  = * ( float * ) &i;
+    y  = * ( Real * ) &i;
     y  = y * ( threehalfs - ( x2 * y * y ) );   // 1st iteration
 //      y  = y * ( threehalfs - ( x2 * y * y ) );   // 2nd iteration, this can be removed
 
     return y;
+}
+
+
+
+
+Real IsAlmostEqual(Real a, Real b)
+{
+    // http://stackoverflow.com/questions/17333/most-effective-way-for-float-and-double-comparison#77735
+    const Real absA = std::abs(a);
+    const Real absB = std::abs(b);
+    const Real e = std::abs( a - b );
+    const Real eps = Constants::EPSILON * ( (absA > absB ) ?  absA : absB );
+    if( e > eps  )
+        return false;
+    return true;
 }
 
 

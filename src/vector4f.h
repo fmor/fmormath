@@ -1,60 +1,75 @@
 #pragma once
 
 #include <cmath>
-#include "fmormathvector.h"
+#include "mathtypes.h"
 
 namespace fmormath {
 
 
-struct Vector4f : public fmVector<Vector4f>
+struct Vector4f
 {
-    float x;
-    float y;
-    float z;
-    float w;
+
+    union
+    {
+        Real data[4];
+        Real xyzw[4];
+        Real rgba[4];
+
+        struct
+        {
+            Real x;
+            Real y;
+            Real z;
+            Real w;
+        };
+
+        struct
+        {
+            Real r;
+            Real g;
+            Real b;
+            Real a;
+        };
 
 
-    inline Vector4f(){}
-    inline Vector4f( float _x, float _y, float _z, float _w ) :
+
+
+    };
+
+
+
+    inline Vector4f()
+    {}
+
+    inline Vector4f( Real _x, Real _y, Real _z, Real _w ) :
         x( _x ),
         y( _y ),
         z( _z ),
         w( _w )
     {}
-    inline Vector4f( const Vector4f& other ) :
-        x( other.x ),
-        y( other.y ),
-        z( other.z ),
-        w( other.w )
-    {}
 
-    virtual inline bool operator ==( const Vector4f& other ) const final override
-    {
-        if( x != other.x ) return false;
-        if( y != other.y ) return false;
-        if( z != other.z ) return false;
-        if( w != other.w ) return false;
-        return true;
-    }
-    virtual inline bool operator !=( const Vector4f& other ) const final override
+    inline Real operator[]( uint index ) const { return data[index]; }
+
+    bool operator ==( const Vector4f& other ) const;
+    inline bool operator !=( const Vector4f& other ) const
     {
         return !( *this == other );
     }
-    virtual inline void operator *=( float f) final override
+    inline void operator *=( Real f)
     {
         x *= f;
         y *= f;
         z *= f;
         w *= f;
     }
-    virtual inline void operator /=( float f) final override
+    inline void operator /=( Real f)
     {
         x /= f;
         y /= f;
         z /= f;
         w /= f;
     }
-    virtual inline Vector4f operator *( float f) const final override
+    inline Vector4f operator *( Real f) const
     {
         Vector4f result;
         result.x *= f;
@@ -63,7 +78,7 @@ struct Vector4f : public fmVector<Vector4f>
         result.w *= f;
         return result;
     }
-    virtual inline Vector4f operator /( float f) const final override
+    inline Vector4f operator /( Real f) const
     {
         Vector4f result;
         result.x /= f;
@@ -72,14 +87,14 @@ struct Vector4f : public fmVector<Vector4f>
         result.w /= f;
         return result;
     }
-    virtual inline void operator +=( const Vector4f& other ) final override
+    inline void operator +=( const Vector4f& other )
     {
         x = x + other.x;
         y = y + other.y;
         z = z + other.z;
         w = w + other.w;
     }
-    virtual inline void operator -=( const Vector4f& other ) final override
+    inline void operator -=( const Vector4f& other )
     {
         x = x - other.x;
         y = y - other.y;
@@ -87,7 +102,7 @@ struct Vector4f : public fmVector<Vector4f>
         w = w - other.w;
     }
 
-    virtual inline Vector4f operator +( const Vector4f& other ) const final override
+    inline Vector4f operator +( const Vector4f& other ) const
     {
         Vector4f result;
         result.x = x + other.x;
@@ -96,7 +111,7 @@ struct Vector4f : public fmVector<Vector4f>
         result.w = w + other.w;
         return result;
     }
-    virtual inline Vector4f operator -( const Vector4f& other ) const final override
+    inline Vector4f operator -( const Vector4f& other ) const
     {
         Vector4f result;
         result.x = x - other.x;
@@ -105,7 +120,7 @@ struct Vector4f : public fmVector<Vector4f>
         result.w = w - other.w;
         return result;
     }
-    virtual inline Vector4f operator -() const final override
+    inline Vector4f operator -() const
     {
         Vector4f result;
         result.x = -x;
@@ -115,7 +130,7 @@ struct Vector4f : public fmVector<Vector4f>
         return result;
     }
 
-    inline void set( float _x, float _y, float _z, float _w )
+    inline void set( Real _x, Real _y, Real _z, Real _w )
     {
         x = _x;
         y = _y;
@@ -123,37 +138,26 @@ struct Vector4f : public fmVector<Vector4f>
         w = _w;
     }
 
-    virtual inline float dot( const Vector4f& other ) const final override
+    inline Real dot( const Vector4f& other ) const
     {
         return x*other.x + y*other.y + z*other.z + w*other.w;
     }
-    virtual inline float length() const final override
+    inline Real length() const
     {
         return std::sqrt( x*x + y*y + z*z + w*w );
     }
-    virtual inline float lengthSquared() const final override
+    inline Real lengthSquared() const
     {
         return ( x*x + y*y + z*z + w*w );
     }
-    virtual inline void  scale( const Vector4f& other ) final override
+    inline void  scale( const Vector4f& other )
     {
         x *= other.x;
         y *= other.y;
         z *= other.z;
         w *= other.w;
     }
-    virtual inline void normalize() final override
-    {
-        float len = std::sqrt( x*x + y*y + z*z + w*w );
-        if( len > 0.f )
-        {
-            float invLen = 1.0f / len;
-            x *= invLen;
-            y *= invLen;
-            z *= invLen;
-            w *= invLen;
-        }
-    }
+    void normalize();
 
 
 
@@ -172,6 +176,8 @@ struct Vector4f : public fmVector<Vector4f>
 
 
 };
+
+inline Vector4f operator*( Real r, const Vector4f& v ) { return v * r; }
 
 
 

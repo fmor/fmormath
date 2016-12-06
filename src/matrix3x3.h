@@ -7,39 +7,41 @@ namespace fmormath {
 
 class Matrix3x3
 {
-    float m_Reals[3][3];
+    Real m_Reals[3][3];
 
 public:
 
     inline Matrix3x3()
     {}
 
-    Matrix3x3( float r00, float r01, float r02,
-                 float r10, float r11, float r12,
-                 float r20, float r21, float r22 );
+    Matrix3x3( Real r00, Real r01, Real r02,
+               Real r10, Real r11, Real r12,
+               Real r20, Real r21, Real r22 );
 
 
-    void set( float r00, float r01, float r02,
-              float r10, float r11, float r12,
-              float r20, float r21, float r22 );
+    void set( Real r00, Real r01, Real r02,
+              Real r10, Real r11, Real r12,
+              Real r20, Real r21, Real r22 );
 
-    inline const float* operator []( uint index ) const { return m_Reals[index]; }
-    inline float* operator []( uint index ) { return m_Reals[index]; }
+    inline const Real* operator []( uint index ) const { return m_Reals[index]; }
+    inline Real* operator []( uint index ) { return m_Reals[index]; }
 
     bool operator == ( const Matrix3x3& other ) const;
     inline bool operator !=( const Matrix3x3& other ) const { return !( *this == other ); }
-    void operator *=( float f );
+    void operator *=( Real f );
     void operator *=( const Matrix3x3& other );
     void operator +=( const Matrix3x3& other );
     void operator -=( const Matrix3x3& other );
 
 
-    Matrix3x3 operator * ( float f ) const;
+    Matrix3x3 operator * ( Real f ) const;
     Vector3f  operator *( const Vector3f& v3 ) const;
     Matrix3x3 operator *( const Matrix3x3& other ) const;
+    Matrix3x3 operator +( const Matrix3x3& other ) const;
+    Matrix3x3 operator -( const Matrix3x3& other ) const;
 
 
-    real determinant() const;
+    Real determinant() const;
     Matrix3x3 inverse() const;
     Matrix3x3 transpose() const;
 

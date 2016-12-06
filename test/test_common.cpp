@@ -38,3 +38,37 @@ TEST( common, IsPowerOf2 )
     EXPECT_FALSE(  IsPowerOf2( 44 ) );
     EXPECT_TRUE(   IsPowerOf2( 512 ) );
 }
+
+TEST( common, IsAlmostEqual )
+{
+    Real a;
+    Real b;
+
+    a = -4;
+    b =  2;
+    EXPECT_FALSE( IsAlmostEqual(a,b) );
+
+    a = -3;
+    b = -3;
+    EXPECT_TRUE( IsAlmostEqual(a,b) );
+
+    a = -2;
+    b = -2.0 - Constants::EPSILON *0.5f;
+    EXPECT_TRUE( IsAlmostEqual(a,b) );
+
+    a = 2.0;
+    b = 2.0 + Constants::EPSILON * 1.00001;
+    EXPECT_TRUE( IsAlmostEqual(a,b) );
+
+    a = 2.0;
+    b = 2.0 - Constants::EPSILON * 1.00001;
+    EXPECT_TRUE( IsAlmostEqual(a,b) );
+
+    a = -2.0;
+    b = -2.0 - Constants::EPSILON * 3.0;
+    EXPECT_FALSE( IsAlmostEqual(a,b) );
+
+    a = -2.0;
+    b = -2.0 + Constants::EPSILON * 3.0;
+    EXPECT_FALSE( IsAlmostEqual(a,b) );
+}

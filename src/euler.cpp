@@ -4,7 +4,7 @@
 
 namespace fmormath {
 
-Vector3f euler::RotateAroundAxis(const Vector3f& v3, real radian, const Vector3f& _axis )
+Vector3f euler::RotateAroundAxis(const Vector3f& v3, Real radian, const Vector3f& _axis )
 {
     Matrix3x3 stepRx;
     Matrix3x3 stepRxInv;

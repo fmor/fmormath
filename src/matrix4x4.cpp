@@ -20,16 +20,16 @@ const Matrix4x4 Matrix4x4::IDENTITY(
 );
 
 
-//static inline float Minor( const Matrix4x4& matrix, uint r0, uint r1, uint r2, uint c0, uint c1, uint c2 )
+//static inline Real Minor( const Matrix4x4& matrix, uint r0, uint r1, uint r2, uint c0, uint c1, uint c2 )
 //{
-//    float result;
+//    Real result;
 //    result  = matrix[r0][c0]*matrix[r1][c1]*matrix[r2][c2] + matrix[r0][c1]*matrix[r1][c2]*matrix[r2][c0] + matrix[r0][c2]*matrix[r1][c0]*matrix[r2][c1];
 //    result -= matrix[r0][c0]*matrix[r1][c2]*matrix[r2][c1] + matrix[r0][c1]*matrix[r1][c0]*matrix[r2][c2] + matrix[r0][c2]*matrix[r1][c1]*matrix[r2][c0];
 //    return result;
 //}
-static inline float Minor( const Matrix4x4& matrix, uint r0, uint r1, uint r2, uint c0, uint c1, uint c2 )
+static inline Real Minor( const Matrix4x4& matrix, uint r0, uint r1, uint r2, uint c0, uint c1, uint c2 )
 {
-    float result;
+    Real result;
     result  = matrix[r0][c0] * ( matrix[r1][c1]*matrix[r2][c2] - matrix[r2][c1]*matrix[r1][c2] );
     result -= matrix[r0][c1] * ( matrix[r1][c0]*matrix[r2][c2] - matrix[r2][c0]*matrix[r1][c2] );
     result += matrix[r0][c2] * ( matrix[r1][c0]*matrix[r2][c1] - matrix[r2][c0]*matrix[r1][c1] );
@@ -40,10 +40,10 @@ static inline float Minor( const Matrix4x4& matrix, uint r0, uint r1, uint r2, u
 
 
 
-Matrix4x4::Matrix4x4(float r00, float r01, float r02, float r03,
-                         float r10, float r11, float r12, float r13,
-                         float r20, float r21, float r22, float r23,
-                         float r30, float r31, float r32, float r33 )
+Matrix4x4::Matrix4x4(Real r00, Real r01, Real r02, Real r03,
+                         Real r10, Real r11, Real r12, Real r13,
+                         Real r20, Real r21, Real r22, Real r23,
+                         Real r30, Real r31, Real r32, Real r33 )
 {
     m_Reals[0][0] = r00;
     m_Reals[0][1] = r01;
@@ -68,10 +68,10 @@ Matrix4x4::Matrix4x4(float r00, float r01, float r02, float r03,
 }
 
 
-void Matrix4x4::set(float r00, float r01, float r02, float r03,
-                      float r10, float r11, float r12, float r13,
-                      float r20, float r21, float r22, float r23,
-                      float r30, float r31, float r32, float r33 )
+void Matrix4x4::set(Real r00, Real r01, Real r02, Real r03,
+                      Real r10, Real r11, Real r12, Real r13,
+                      Real r20, Real r21, Real r22, Real r23,
+                      Real r30, Real r31, Real r32, Real r33 )
 {
     m_Reals[0][0] = r00;
     m_Reals[0][1] = r01;
@@ -145,7 +145,7 @@ bool Matrix4x4::operator !=(const Matrix4x4 &other) const
     return false;
 }
 
-void Matrix4x4::operator *=(float f)
+void Matrix4x4::operator *=(Real f)
 {
     m_Reals[0][0] *= f;
     m_Reals[0][1] *= f;
@@ -241,6 +241,42 @@ void Matrix4x4::operator -=( const Matrix4x4& other)
     m_Reals[3][3] -= other.m_Reals[3][3];
 }
 
+Matrix4x4 Matrix4x4::operator *(Real r) const
+{
+    Matrix4x4 result;
+
+    result[0][0] = m_Reals[0][0] * r;
+    result[0][1] = m_Reals[0][1] * r;
+    result[0][2] = m_Reals[0][2] * r;
+    result[0][3] = m_Reals[0][3] * r;
+
+    result[1][0] = m_Reals[1][0] * r;
+    result[1][1] = m_Reals[1][1] * r;
+    result[2][2] = m_Reals[1][2] * r;
+    result[3][3] = m_Reals[1][3] * r;
+
+    result[2][0] = m_Reals[2][0] * r;
+    result[2][1] = m_Reals[2][1] * r;
+    result[2][2] = m_Reals[2][2] * r;
+    result[1][3] = m_Reals[2][3] * r;
+
+    result[3][0] = m_Reals[3][0] * r;
+    result[3][1] = m_Reals[3][1] * r;
+    result[3][2] = m_Reals[3][2] * r;
+    result[3][3] = m_Reals[3][3] * r;
+
+    return result;
+
+}
+
+Vector2f Matrix4x4::operator *(const Vector2f& v2 ) const
+{
+    Vector2f result;
+    result.x = m_Reals[0][0] * v2.x + m_Reals[0][1] * v2.y + m_Reals[0][3];
+    result.y = m_Reals[1][0] * v2.x + m_Reals[1][1] * v2.y + m_Reals[1][3];
+    return result;
+}
+
 Vector3f Matrix4x4::operator *(const Vector3f& v3 ) const
 {
     Vector3f result;
@@ -287,11 +323,77 @@ Matrix4x4 Matrix4x4::operator *( const Matrix4x4& other ) const
     return result;
 }
 
-void Matrix4x4::setTranslation(float x, float y, float z)
+Matrix4x4 Matrix4x4::operator +(const Matrix4x4& other ) const
 {
-    m_Reals[0][3] = x;
-    m_Reals[1][3] = y;
-    m_Reals[2][3] = z;
+    Matrix4x4 result;
+
+    result[0][0] = m_Reals[0][0] + other.m_Reals[0][0];
+    result[0][1] = m_Reals[0][1] + other.m_Reals[0][1];
+    result[0][2] = m_Reals[0][2] + other.m_Reals[0][2];
+    result[0][3] = m_Reals[0][3] + other.m_Reals[0][3];
+
+    result[1][0] = m_Reals[1][0] + other.m_Reals[1][0];
+    result[1][1] = m_Reals[1][1] + other.m_Reals[1][1];
+    result[2][2] = m_Reals[1][2] + other.m_Reals[1][2];
+    result[3][3] = m_Reals[1][3] + other.m_Reals[1][3];
+
+    result[2][0] = m_Reals[2][0] + other.m_Reals[2][0];
+    result[2][1] = m_Reals[2][1] + other.m_Reals[2][1];
+    result[2][2] = m_Reals[2][2] + other.m_Reals[2][2];
+    result[1][3] = m_Reals[2][3] + other.m_Reals[2][3];
+
+    result[3][0] = m_Reals[3][0] + other.m_Reals[3][0];
+    result[3][1] = m_Reals[3][1] + other.m_Reals[3][1];
+    result[3][2] = m_Reals[3][2] + other.m_Reals[3][2];
+    result[3][3] = m_Reals[3][3] + other.m_Reals[3][3];
+
+    return result;
+}
+
+Matrix4x4 Matrix4x4::operator -(const Matrix4x4& other ) const
+{
+    Matrix4x4 result;
+
+    result[0][0] = m_Reals[0][0] - other.m_Reals[0][0];
+    result[0][1] = m_Reals[0][1] - other.m_Reals[0][1];
+    result[0][2] = m_Reals[0][2] - other.m_Reals[0][2];
+    result[0][3] = m_Reals[0][3] - other.m_Reals[0][3];
+
+    result[1][0] = m_Reals[1][0] - other.m_Reals[1][0];
+    result[1][1] = m_Reals[1][1] - other.m_Reals[1][1];
+    result[2][2] = m_Reals[1][2] - other.m_Reals[1][2];
+    result[3][3] = m_Reals[1][3] - other.m_Reals[1][3];
+
+    result[2][0] = m_Reals[2][0] - other.m_Reals[2][0];
+    result[2][1] = m_Reals[2][1] - other.m_Reals[2][1];
+    result[2][2] = m_Reals[2][2] - other.m_Reals[2][2];
+    result[1][3] = m_Reals[2][3] - other.m_Reals[2][3];
+
+    result[3][0] = m_Reals[3][0] - other.m_Reals[3][0];
+    result[3][1] = m_Reals[3][1] - other.m_Reals[3][1];
+    result[3][2] = m_Reals[3][2] - other.m_Reals[3][2];
+    result[3][3] = m_Reals[3][3] - other.m_Reals[3][3];
+
+    return result;
+}
+
+void Matrix4x4::setTranslation( const Vector3f& v )
+{
+    m_Reals[0][3] = v.x;
+    m_Reals[1][3] = v.y;
+    m_Reals[2][3] = v.z;
+}
+
+void Matrix4x4::setOrientation(const Quaternion& q )
+{
+    throw;
+}
+
+void Matrix4x4::setScale( const Vector3f& v )
+{
+    m_Reals[0][0] = v.x;
+    m_Reals[1][1] = v.y;
+    m_Reals[2][2] = v.z;
 }
 
 void Matrix4x4::decompose(Vector3f& translation, Quaternion &orientation, Vector3f& scale ) const
@@ -309,17 +411,35 @@ void Matrix4x4::decompose(Vector3f& translation, Quaternion &orientation, Vector
 
 }
 
-Vector3f Matrix4x4::translation() const
+Vector3f Matrix4x4::getTranslation() const
 {
     return Vector3f( m_Reals[0][3], m_Reals[1][3], m_Reals[2][3] );
+}
+
+Quaternion Matrix4x4::getOrientation() const
+{
+    throw;
+// http://www.euclideanspace.com/maths/geometry/rotations/conversions/matrixToQuaternion/
+
+}
+
+Vector3f Matrix4x4::getScale() const
+{
+    Vector3f scale;
+
+    scale.x = m_Reals[0][0];
+    scale.y = m_Reals[1][1];
+    scale.z = m_Reals[2][2];
+
+    return scale;
 }
 
 
 
 
-float Matrix4x4::determinant() const
+Real Matrix4x4::determinant() const
 {
-    float det = 0;
+    Real det = 0;
 
     det += m_Reals[0][0] * Minor( *this, 1,2,3, 1,2,3 );
     det -= m_Reals[0][1] * Minor( *this, 1,2,3, 0,2,3 );
@@ -355,12 +475,12 @@ Matrix4x4 Matrix4x4::inverse() const
     result.m_Reals[3][3] =  Minor( *this, 0,1,2, 0,1,2 );
 
     // Calcul du déterminant
-    float det = determinant();
+    Real det = determinant();
     if( det == 0.f )
     {
         return Matrix4x4::ZERO;
     }
-    float invDet = 1.f / det;
+    Real invDet = 1.f / det;
 
     // Multiplier 1/det
     result *= invDet;
@@ -402,16 +522,35 @@ Matrix4x4 Matrix4x4::tranpose() const
 
 Matrix4x4 Matrix4x4::inverseTranspose() const
 {
-    throw;
+    return inverse().tranpose();
 }
 
-
-void Matrix4x4::makeRotationMatrix(float degree, const Vector3f &axis)
+Matrix4x4& Matrix4x4::makeRotationMatrix(const Quaternion& q )
 {
-    throw;
+    m_Reals[0][0] = 1.f - 2.f*q.y*q.y -2.f*q.z*q.z;
+    m_Reals[0][1] = 2.f* q.x*q.y - 2.f*q.z*q.w;
+    m_Reals[0][2] = 2.f*q.x*q.z  + 2.f*q.y*q.w;
+    m_Reals[0][3] = 0;
+
+    m_Reals[1][0] = 2.f*q.x*q.y + 2.f*q.z*q.w;
+    m_Reals[1][1] = 1 - 2.f*q.x*q.x - 2.f*q.z*q.z;
+    m_Reals[1][2] = 2.f*q.y*q.z - 2.f*q.x*q.w;
+    m_Reals[1][3] = 0;
+
+    m_Reals[2][0] = 2.f*q.x*q.z - 2.f*q.y*q.w;
+    m_Reals[2][1] = 2.f*q.y*q.z + 2.f*q.x*q.w;
+    m_Reals[2][2] = 1 - 2.f*q.x*q.x -2.f*q.y*q.y;
+    m_Reals[2][3] = 0;
+
+    m_Reals[3][0] = 0;
+    m_Reals[3][1] = 0;
+    m_Reals[3][2] = 0;
+    m_Reals[3][3] = 1;
+
+    return *this;
 }
 
-void Matrix4x4::makeScaleMatrix(const Vector3f& scale )
+Matrix4x4& Matrix4x4::makeScaleMatrix(const Vector3f& scale )
 {
     m_Reals[0][0] = scale.x;
     m_Reals[0][1] = 0;
@@ -432,9 +571,11 @@ void Matrix4x4::makeScaleMatrix(const Vector3f& scale )
     m_Reals[3][1] = 0;
     m_Reals[3][2] = 0;
     m_Reals[3][3] = 1;
+
+    return *this;
 }
 
-void Matrix4x4::makeTranslationMatrix(const Vector3f& translation )
+Matrix4x4& Matrix4x4::makeTranslationMatrix(const Vector3f& translation )
 {
     m_Reals[0][0] = 1;
     m_Reals[0][1] = 0;
@@ -455,9 +596,36 @@ void Matrix4x4::makeTranslationMatrix(const Vector3f& translation )
     m_Reals[3][1] = 0;
     m_Reals[3][2] = 0;
     m_Reals[3][3] = 1;
+
+    return *this;
 }
 
-void Matrix4x4::translate(float x, float y, float z)
+Matrix4x4& Matrix4x4::makeOrthoMatrix( const Real width, const Real height )
+{
+    m_Reals[0][0] = Real(2) / width;
+    m_Reals[0][1] = 0;
+    m_Reals[0][2] = 0;
+    m_Reals[0][3] = -1;
+
+    m_Reals[1][0] = 0;
+    m_Reals[1][1] = Real(2) / height;
+    m_Reals[1][2] = 0;
+    m_Reals[1][3] = -1;
+
+    m_Reals[2][0] = 0;
+    m_Reals[2][1] = 0;
+    m_Reals[2][2] = 1;
+    m_Reals[2][3] = 0;
+
+    m_Reals[3][0] = 0;
+    m_Reals[3][1] = 0;
+    m_Reals[3][2] = 0;
+    m_Reals[3][3] = 1;
+
+    return *this;
+}
+
+void Matrix4x4::translate(Real x, Real y, Real z)
 {
     m_Reals[0][3] += x;
     m_Reals[1][3] += y;
@@ -469,7 +637,7 @@ void Matrix4x4::rotate( const Quaternion& quaternion )
     throw;
 }
 
-void Matrix4x4::rotate(float degrees, const Vector3f &axis)
+void Matrix4x4::rotate( Real degrees, const Vector3f& axis )
 {
     throw;
 }

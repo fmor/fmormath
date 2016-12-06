@@ -1,7 +1,10 @@
-#include "../src/matrix4x4.h"
-
-
 #include <gtest/gtest.h>
+
+
+#include "../src/matrix4x4.h"
+#include "../src/common.h"
+
+
 
 
 using namespace fmormath;
@@ -166,6 +169,11 @@ TEST( Matrix4x4, operator_mult_equal_matrix4x4 )
     matrix *= other;
 
     EXPECT_TRUE( matrix == correct );
+}
+
+
+TEST( Matrix4x4, operator_mult_V2 )
+{
 }
 
 TEST( Matrix4x4, operator_mult_V3 )
@@ -407,8 +415,29 @@ TEST( Matrix4x4, makeTranslationMatrix )
     EXPECT_FLOAT_EQ( 0, matrix[3][1] );
     EXPECT_FLOAT_EQ( 0, matrix[3][2] );
     EXPECT_FLOAT_EQ( 1, matrix[3][3] );
+}
+
+
+TEST( Matrix4x4, makeRotationMatrix )
+{
+    Quaternion q;
+    Vector3f r;
+    Matrix4x4 m;
+
+    q.fromAngleAxis(DegreeToRadian(90), Vector3f::UNIT_Y );
+    r = m.makeRotationMatrix( q ) * Vector3f::UNIT_Z;
+    EXPECT_EQ( r, Vector3f::UNIT_X );
+
+    q.fromAngleAxis(DegreeToRadian(90), Vector3f::UNIT_Z );
+    r = m.makeRotationMatrix( q ) * Vector3f::UNIT_X;
+    EXPECT_EQ( r, Vector3f::UNIT_Y );
+
+    q.fromAngleAxis(DegreeToRadian(180), Vector3f(-1,0,0) );
+    r = m.makeRotationMatrix( q ) * Vector3f::UNIT_SCALE;
+    EXPECT_EQ( r, Vector3f( 1,-1,-1)  );
 
 }
+
 TEST( Matrix4x4, makeScaleMatrix )
 {
     Vector3f scale( 6, 3, -8 );
@@ -438,6 +467,35 @@ TEST( Matrix4x4, makeScaleMatrix )
 
 }
 
+TEST( Matrix4x4, makeOrtho )
+{
+    Matrix4x4 matrix;
+    matrix.makeOrthoMatrix( 480, 800 );
+
+
+    EXPECT_FLOAT_EQ( matrix[0][0], 2.f/480.f);
+    EXPECT_FLOAT_EQ( matrix[0][1], 0 );
+    EXPECT_FLOAT_EQ( matrix[0][2], 0 );
+    EXPECT_FLOAT_EQ( matrix[0][3], -1 );
+
+    EXPECT_FLOAT_EQ( matrix[1][0], 0 );
+    EXPECT_FLOAT_EQ( matrix[1][1], 2.f/800.f );
+    EXPECT_FLOAT_EQ( matrix[1][2], 0 );
+    EXPECT_FLOAT_EQ( matrix[1][3], -1 );
+
+    EXPECT_FLOAT_EQ( matrix[2][0], 0 );
+    EXPECT_FLOAT_EQ( matrix[2][1], 0 );
+    EXPECT_FLOAT_EQ( matrix[2][2], 1 );
+    EXPECT_FLOAT_EQ( matrix[2][3], 0 );
+
+    EXPECT_FLOAT_EQ( matrix[3][0], 0 );
+    EXPECT_FLOAT_EQ( matrix[3][1], 0 );
+    EXPECT_FLOAT_EQ( matrix[3][2], 0 );
+    EXPECT_FLOAT_EQ( matrix[3][3], 1 );
+
+
+}
+
 
 TEST( Matrix4x4, translation )
 {
@@ -445,6 +503,28 @@ TEST( Matrix4x4, translation )
     Matrix4x4 matrix;
     matrix.makeTranslationMatrix( translation );
 
-    EXPECT_EQ( translation, matrix.translation() );
+    EXPECT_EQ( translation, matrix.getTranslation() );
 }
+
+TEST( Matrix4x4, setTranslation )
+{
+    Matrix4x4 m = Matrix4x4::IDENTITY;
+    m.setTranslation( Vector3f( -4, 5, 10 ) );
+
+    EXPECT_EQ( m * Vector3f::ZERO,  Vector3f( -4, 5, 10 ) );
+    EXPECT_EQ( m * Vector3f::UNIT_SCALE,  Vector3f( -3, 6, 11 ) );
+    EXPECT_EQ( m * Vector3f(4,-5,-10),  Vector3f::ZERO );
+}
+
+TEST( Matrix4x4, setScale )
+{
+    Matrix4x4 m = Matrix4x4::IDENTITY;
+    m.setScale( Vector3f( 2, 3, 5 ) );
+
+    EXPECT_EQ( m * Vector3f::ZERO,  Vector3f::ZERO );
+    EXPECT_EQ( m * Vector3f::UNIT_SCALE,  Vector3f(2,3,5) );
+    EXPECT_EQ( m * Vector3f(4,5,6) , Vector3f(8,15,30) );
+}
+
+
 

@@ -11,23 +11,38 @@ namespace fmormath {
 const Quaternion Quaternion::IDENTITY( 1, 0, 0, 0 );
 const Quaternion Quaternion::ZERO( 0, 0, 0, 0 );
 
-Quaternion::Quaternion(real radian, const Vector3f& axis )
+Quaternion::Quaternion( Real radian, const Vector3f& axis )
 {
 #ifdef _DEBUG_
-    const real d =  1.0 - axis.length();
+    const Real d =  1.0 - axis.length();
     if( d > Constants::EPSILON  )
         throw;
 #endif
 
-    const real half_radian = radian * 0.5;
-    const real _cos = std::cos( half_radian );
-    const real _sin = std::sin( half_radian );
+    const Real half_radian = radian * 0.5;
+    const Real _cos = std::cos( half_radian );
+    const Real _sin = std::sin( half_radian );
 
     w = _cos;
     x = _sin * axis.x;
     y = _sin * axis.y;
     z = _sin * axis.z;
 }
+
+Quaternion& Quaternion::fromAngleAxis(Real radian, const Vector3f &axis)
+ {
+//    Quaternion* q = new(this) Quaternion(radian,axis);
+    const Real half_radian = radian * 0.5;
+    const Real _cos = std::cos( half_radian );
+    const Real _sin = std::sin( half_radian );
+
+    w = _cos;
+    x = _sin * axis.x;
+    y = _sin * axis.y;
+    z = _sin * axis.z;
+
+    return *this;
+ }
 
 bool Quaternion::operator ==(const Quaternion &other) const
 {
@@ -141,10 +156,10 @@ Quaternion Quaternion::conjugate() const
 Quaternion Quaternion::inverse() const
 {
     Quaternion q = conjugate();
-    real ns = normSquared();
-    if( ns != 1. )
+    Real ns = normSquared();
+    if( ns != Real(1.0) )
     {
-          ns = 1.0 /  ns;
+          ns = Real(1.0) /  ns;
           q.w *= ns;
           q.x *= ns;
           q.y *= ns;
@@ -155,30 +170,30 @@ Quaternion Quaternion::inverse() const
     return q;
 }
 
-real Quaternion::norm() const
+Real Quaternion::norm() const
 {
-    real l = std::sqrt( w*w + x*x + y*y + z*z );
+    Real l = std::sqrt( w*w + x*x + y*y + z*z );
     return l;
 }
 
-real Quaternion::normSquared() const
+Real Quaternion::normSquared() const
 {
-    real l =  w*w + x*x + y*y + z*z;
+    Real l =  w*w + x*x + y*y + z*z;
     return l;
 }
 
 void Quaternion::normalize()
 {
-    real f = 1.0 / std::sqrt( w*w + x*x + y*y + z*z );
+    Real f = 1.0 / std::sqrt( w*w + x*x + y*y + z*z );
     w *= f;
     x *= f;
     y *= f;
     z *= f;
 }
 
-real Quaternion::dot( const Quaternion& other ) const
+Real Quaternion::dot( const Quaternion& other ) const
 {
-    real d = w*other.w + x*other.x + y*other.y + z*other.z;
+    Real d = w*other.w + x*other.x + y*other.y + z*other.z;
     return d;
 }
 

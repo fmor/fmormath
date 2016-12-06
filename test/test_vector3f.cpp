@@ -88,14 +88,14 @@ TEST( Vector3f, constructor_vector3 )
 
 //////////////////////////////////////////////////////////////
 /// operator
-TEST( Vector3f, void_operator_equal_vector3f )
+TEST( Vector3f, operator_equal_vector3f )
 {
     Vector3f first(  5,4, 10 );
     Vector3f second(-5,-4, 10 );
     EXPECT_TRUE( first == first  );
     EXPECT_FALSE(first == second  );
 }
-TEST( Vector3f, void_operator_notequal_vector3f )
+TEST( Vector3f, operator_notequal_vector3f )
 {
     Vector3f first(  5,4, 10 );
     Vector3f second(-5,-4, 10 );
@@ -103,23 +103,41 @@ TEST( Vector3f, void_operator_notequal_vector3f )
     EXPECT_FALSE( first != first  );
 }
 
-TEST( Vector3f, void_operator_mult_float )
+TEST( Vector3f, operator_add_vector3f )
+{
+    Vector3f first(  5, 4, 10);
+    Vector3f second(-5,-4, 10);
+    Vector3f result = first + second;
+    EXPECT_EQ(  0, result.x );
+    EXPECT_EQ(  0, result.y );
+    EXPECT_EQ( 20, result.z );
+}
+TEST( Vector3f, operator_sub_vector3f )
+{
+    Vector3f first(  5, 4, 10);
+    Vector3f second(-5,-4, 10);
+    Vector3f result = first - second;
+    EXPECT_EQ( 10, result.x );
+    EXPECT_EQ(  8, result.y );
+    EXPECT_EQ(  0, result.z );
+}
+TEST( Vector3f, operator_mult_float )
 {
     Vector3f first(  36, 24, 11 );
-    first *= 8;
-    EXPECT_EQ( 288, first.x );
-    EXPECT_EQ( 192, first.y );
-    EXPECT_EQ(  88, first.z );
+    Vector3f result = first * 8;
+    EXPECT_EQ( 288, result.x );
+    EXPECT_EQ( 192, result.y );
+    EXPECT_EQ(  88, result.z );
 }
-TEST( Vector3f, void_operator_divide_float )
+TEST( Vector3f, operator_divide_float )
 {
     Vector3f first(  24, 44, 50);
-    first /= 8;
-    EXPECT_EQ(    3, first.x );
-    EXPECT_EQ(  5.5, first.y );
-    EXPECT_EQ( 6.25, first.z );
+    Vector3f result = first / 8;
+    EXPECT_EQ(    3, result.x );
+    EXPECT_EQ(  5.5, result.y );
+    EXPECT_EQ( 6.25, result.z );
 }
-TEST( Vector3f, void_operator_add_vector3f )
+TEST( Vector3f, operator_addassign_vector3f )
 {
     Vector3f first(  5, 4, 10);
     Vector3f second(-5,-4, 10);
@@ -128,17 +146,35 @@ TEST( Vector3f, void_operator_add_vector3f )
     EXPECT_EQ(  0, first.y );
     EXPECT_EQ( 20, first.z );
 }
-TEST( Vector3f, void_operator_sub_vector3f )
+TEST( Vector3f, operator_subassign_vector3f )
 {
     Vector3f first(  5, 4, 10);
     Vector3f second(-5,-4, 10);
+    Vector3f result = first - second;
 
-    first -= second;
-
-    EXPECT_EQ( 10, first.x );
-    EXPECT_EQ(  8, first.y );
-    EXPECT_EQ(  0, first.z );
+    EXPECT_EQ( 10, result.x );
+    EXPECT_EQ(  8, result.y );
+    EXPECT_EQ(  0, result.z );
 }
+TEST( Vector3f, operator_multassign_float )
+{
+    Vector3f first(  36, 24, 11 );
+    first *= 8;
+    EXPECT_EQ( 288, first.x );
+    EXPECT_EQ( 192, first.y );
+    EXPECT_EQ(  88, first.z );
+}
+TEST( Vector3f, operator_divideassign_float )
+{
+    Vector3f first(  24, 44, 50);
+    first /= 8;
+    EXPECT_EQ(    3, first.x );
+    EXPECT_EQ(  5.5, first.y );
+    EXPECT_EQ( 6.25, first.z );
+}
+
+
+
 TEST( Vector3f, operator_minus )
 {
     Vector3f v3( 1,2,3);
@@ -275,68 +311,42 @@ TEST( Vector3f, rotate )
 {
     Vector3f v3;
 
-
-
-
-    float rad = DegreeToRadian(45.f);
-
-
-
-    Vector3f axis = Vector3f(1,6,3);
-    axis.normalize();
-
-
-    v3.set( 10, 10, 10 );
-    v3.rotate( rad, axis );
-
-    EXPECT_NEAR( 10.835508, v3.x, Constants::EPSILON );
-    EXPECT_NEAR( 12.976558, v3.y, Constants::EPSILON );
-    EXPECT_NEAR(  3.768381, v3.z, Constants::EPSILON );
+//    v3 = Vector3f( 10, 10, 10 );
+//    v3.rotate( DegreeToRadian(45.f), Vector3f(1,6,3) );
+//    EXPECT_EQ( v3, Vector3f(10.835508f, 12.976558f, 3.768381f) );
 
 
 
     v3 = Vector3f( 1,1,1 );
-    v3.rotate( DegreeToRadian(180), Vector3f(-1,0,1) );
-    EXPECT_NEAR( -1, v3.x, Constants::EPSILON );
-    EXPECT_NEAR( -1, v3.y, Constants::EPSILON );
-    EXPECT_NEAR( -1, v3.z, Constants::EPSILON );
+    v3.rotate( DegreeToRadian(180), Vector3f(-1,0,0) );
+    EXPECT_EQ( v3, Vector3f( 1,-1,-1)  );
 
 
     // Oposite
     v3 = Vector3f( 1,1,1 );
     v3.rotate( DegreeToRadian(90), Vector3f(-1,-1,-1) );
-    EXPECT_NEAR( 1, v3.x, Constants::EPSILON );
-    EXPECT_NEAR( 1, v3.y, Constants::EPSILON );
-    EXPECT_NEAR( 1, v3.z, Constants::EPSILON );
+    EXPECT_EQ( v3, Vector3f::UNIT_SCALE );
 
 
 
     v3 =  Vector3f( 1,1,1 );
     v3.rotate( DegreeToRadian(180), Vector3f::UNIT_Y );
-    EXPECT_NEAR( -1, v3.x, Constants::EPSILON );
-    EXPECT_NEAR(  1, v3.y, Constants::EPSILON );
-    EXPECT_NEAR( -1, v3.z, Constants::EPSILON );
+    EXPECT_EQ( v3, Vector3f(-1,1,-1) );
 
 
 
     // Axis Z
     v3 =  Vector3f::UNIT_Z;
     v3.rotate( DegreeToRadian(90), Vector3f::UNIT_Y );
-    EXPECT_NEAR( 1, v3.x, Constants::EPSILON );
-    EXPECT_NEAR( 0, v3.y, Constants::EPSILON );
-    EXPECT_NEAR( 0, v3.z, Constants::EPSILON );
+    EXPECT_EQ( v3, Vector3f( 1,0,0) );
 
     // Axis X
     v3 =  Vector3f::UNIT_X;
     v3.rotate( DegreeToRadian(90), Vector3f::UNIT_Z );
-    EXPECT_NEAR( 0, v3.x, Constants::EPSILON );
-    EXPECT_NEAR( 1, v3.y, Constants::EPSILON );
-    EXPECT_NEAR( 0, v3.z, Constants::EPSILON );
+    EXPECT_EQ( v3, Vector3f( 0,1,0) );
 
     // Axis Y
     v3 =  Vector3f::UNIT_Y;
     v3.rotate( DegreeToRadian(90), Vector3f::UNIT_X );
-    EXPECT_NEAR( 0, v3.x, Constants::EPSILON );
-    EXPECT_NEAR( 0, v3.y, Constants::EPSILON );
-    EXPECT_NEAR( 1, v3.z, Constants::EPSILON );
+    EXPECT_EQ( v3, Vector3f( 0,0,1) );
 }

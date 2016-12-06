@@ -6,7 +6,7 @@
 
 namespace fmormath {
 
-typedef float   real;
+typedef float   Real;
 
 typedef unsigned int uint;
 typedef uint8_t      u8;
@@ -25,6 +25,7 @@ static_assert(sizeof(double)*CHAR_BIT==64,  "float is not 32 bit on this archite
 
 typedef float f32;
 typedef double f64;
+
 
 
 
