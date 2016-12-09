@@ -1,6 +1,6 @@
 #pragma once
 
-
+/*
 namespace fmormath {
 
 template< typename T>
@@ -33,3 +33,4 @@ struct fmVector
 
 
 }
+*/
