@@ -18,8 +18,8 @@ Matrix is row major, you need to set transpose when passed to opengl uniform :
 
 ## CMake Settings
 
-|:Variable                    |:Desciption                                                |
-|-----------------------------|-----------------------------------------------------------|
+|Variable                     |Desciption                                                 |
+|:----------------------------|:----------------------------------------------------------|
 | FMOR_ENABLE_TESTS           | Enable tests ( Require goolge test installed )            |
 |-----------------------------|-----------------------------------------------------------|
 | FMOR_BUILD_STATIC           | Build static library                                      |
