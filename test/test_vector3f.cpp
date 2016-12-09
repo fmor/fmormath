@@ -224,19 +224,19 @@ TEST( Vector3f, length )
     Vector3f  v3;
 
     v3.set( 5, 4, 2 );
-    EXPECT_EQ( std::sqrt(45.f),  v3.length() );
+    EXPECT_EQ( std::sqrt( Real(45) ),  v3.length() );
 
     v3.set(5,-4, 2 );
-    EXPECT_EQ( std::sqrt(45.f),  v3.length() );
+    EXPECT_EQ( std::sqrt( Real(45) ),  v3.length() );
 }
 TEST( Vector3f, lengthSquared )
 {
     Vector3f  v3;
     v3.set( 5, 4, 2 );
-    EXPECT_EQ( 45.f,  v3.lengthSquared() );
+    EXPECT_EQ( Real(45),  v3.lengthSquared() );
 
     v3.set(5,-4, 2 );
-    EXPECT_EQ( 45.f,  v3.lengthSquared() );
+    EXPECT_EQ( Real(45),  v3.lengthSquared() );
 }
 
 TEST( Vector3f, scale )
@@ -254,7 +254,7 @@ TEST( Vector3f, normalize )
     Vector3f  v3( 3,6, 22 );
 
     Vector3f correct;
-    float invl = 1.0f / std::sqrt( v3.x*v3.x + v3.y*v3.y + v3.z*v3.z );
+    Real invl = Real(1.0) / std::sqrt( v3.x*v3.x + v3.y*v3.y + v3.z*v3.z );
     correct.x = v3.x * invl;
     correct.y = v3.y * invl;
     correct.z = v3.z * invl;

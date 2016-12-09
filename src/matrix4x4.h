@@ -76,6 +76,9 @@ public:
     Matrix4x4 inverseTranspose() const;
 
 
+    inline Matrix4x4& makeScaleMatrix( Real x, Real y, Real z )         { return makeScaleMatrix( Vector3f(x,y,z) ); }
+    inline Matrix4x4& makeTranslationMatrix( Real x, Real y, Real z )   { return makeTranslationMatrix( Vector3f(x,y,z)); }
+
 
     Matrix4x4& makeRotationMatrix( const Quaternion& rotation );
     Matrix4x4& makeScaleMatrix( const Vector3f& scale );

@@ -6,7 +6,12 @@
 
 namespace fmormath {
 
+#ifdef DEFINE_REAL_AS_DOUBLE
+typedef double  Real;
+#else
 typedef float   Real;
+#endif
+
 
 typedef unsigned int uint;
 typedef uint8_t      u8;

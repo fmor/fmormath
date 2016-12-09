@@ -211,19 +211,19 @@ TEST( Vector4f, length )
     Vector4f  v4;
 
     v4.set( 5, 4, 2, 4);
-    EXPECT_EQ( std::sqrt(61.f),  v4.length() );
+    EXPECT_EQ( std::sqrt( Real(61) ),  v4.length() );
 
     v4.set(5,-4, 2,-4);
-    EXPECT_EQ( std::sqrt(61.f),  v4.length() );
+    EXPECT_EQ( std::sqrt( Real(61) ),  v4.length() );
 }
 TEST( Vector4f, lengthSquared )
 {
     Vector4f  v4;
     v4.set( 5, 4, 2, 4);
-    EXPECT_EQ( 61.f,  v4.lengthSquared() );
+    EXPECT_EQ(  Real(61) ,  v4.lengthSquared() );
 
     v4.set(5,-4, 2,-4);
-    EXPECT_EQ( 61.f,  v4.lengthSquared() );
+    EXPECT_EQ(  Real(61) ,  v4.lengthSquared() );
 }
 
 TEST( Vector4f, scale )
@@ -242,7 +242,7 @@ TEST( Vector4f, normalize )
     Vector4f  v4( 3,6, 22, 4 );
 
     Vector4f correct;
-    float invl = 1.0f / std::sqrt( v4.x*v4.x + v4.y*v4.y + v4.z*v4.z + v4.w*v4.w );
+    Real invl = Real(1.0) / std::sqrt( v4.x*v4.x + v4.y*v4.y + v4.z*v4.z + v4.w*v4.w );
     correct.x = v4.x * invl;
     correct.y = v4.y * invl;
     correct.z = v4.z * invl;

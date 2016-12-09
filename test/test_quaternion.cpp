@@ -185,10 +185,10 @@ TEST( Quaternion, inverse )
     Quaternion q( 2,  3,  5,  7 );
     Quaternion inverse = q.inverse();
 
-    EXPECT_EQ(  2.f/87.f, inverse.w );
-    EXPECT_EQ( -3.f/87.f, inverse.x );
-    EXPECT_EQ( -5.f/87.f, inverse.y );
-    EXPECT_EQ( -7.f/87.f, inverse.z );
+    EXPECT_EQ(  Real(2./87.) , inverse.w );
+    EXPECT_EQ(  Real(-3./87.), inverse.x );
+    EXPECT_EQ(  Real(-5./87.), inverse.y );
+    EXPECT_EQ(  Real(-7./87.), inverse.z );
 
     Quaternion q1 = q * inverse;
     EXPECT_NEAR( 1 ,  q1.w, Constants::EPSILON );

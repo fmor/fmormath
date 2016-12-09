@@ -15,7 +15,7 @@ const Vector2f Vector2f::NEGATIVE_UNIT_Y(0,-1);
 const Vector2f Vector2f::UNIT_SCALE(1,1);
 
 
-void Vector2f::rotate( float radian )
+void Vector2f::rotate( Real radian )
 {
     const float cosR = std::cos( radian );
     const float sinR = std::sin( radian );

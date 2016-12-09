@@ -155,20 +155,20 @@ TEST( Vector2f, length )
     Vector2f  v2;
 
     v2.set( 5, 4 );
-    EXPECT_EQ( std::sqrt(41.f),  v2.length() );
+    EXPECT_EQ( std::sqrt( Real(41.) ),  v2.length() );
 
     v2.set( 5,-4);
-    EXPECT_EQ( std::sqrt(41.f),  v2.length() );
+    EXPECT_EQ( std::sqrt( Real(41.)),  v2.length() );
 }
 
 TEST( Vector2f, lengthSquared )
 {
     Vector2f  v2;
     v2.set( 5, 4 );
-    EXPECT_EQ( 41.f,  v2.lengthSquared() );
+    EXPECT_EQ( Real(41.),  v2.lengthSquared() );
 
     v2.set( 5,-4 );
-    EXPECT_EQ( 41.f,  v2.lengthSquared() );
+    EXPECT_EQ( Real(41),  v2.lengthSquared() );
 }
 
 TEST( Vector2f, scale )
@@ -185,7 +185,7 @@ TEST( Vector2f, normalize )
     Vector2f  v2( 3, 6 );
 
     Vector2f correct;
-    float invl = 1.0f / std::sqrt( v2.x*v2.x + v2.y*v2.y );
+    Real invl = Real(1.0) / std::sqrt( v2.x*v2.x + v2.y*v2.y );
     correct.x = v2.x * invl;
     correct.y = v2.y * invl;
 
