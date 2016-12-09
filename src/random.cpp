@@ -5,6 +5,9 @@
 
 #include <cstdlib>
 
+//#include <random>
+//std::mt19937 rnd{};
+
 namespace fmormath {
 
 int RandomRange(int min, int max)
@@ -19,15 +22,15 @@ int RandomRange(int min, int max)
     return std::rand() % delta + min;
 }
 
-float RandomRange(float min, float max)
+Real RandomRange(Real min, Real max)
 {
     if( min == max )
         return min;
     if( min > max )
         return min;
 
-    float p = RANDOM_PRECISION;
-    float r = float(std::rand() % RANDOM_PRECISION) / p ;
+    Real p = RANDOM_PRECISION;
+    Real r = Real(std::rand() % RANDOM_PRECISION) / p ;
     r = min + r * (max-min);
     return r;
 }

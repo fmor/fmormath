@@ -467,26 +467,42 @@ TEST( Matrix4x4, makeScaleMatrix )
 
 }
 
-TEST( Matrix4x4, makeOrtho )
+TEST( Matrix4x4, makeProjOrthoMatrix  )
 {
     Matrix4x4 matrix;
-    matrix.makeOrthoMatrix( 480, 800 );
+    matrix.makeProjOrthoMatrix( -256, 256, -128, 128, 1, 100 );
 
 
-    EXPECT_FLOAT_EQ( matrix[0][0], 2.f/480.f);
+    Vector3f p;
+
+    p = Vector3f( -128, 64, 1 );
+    p = matrix * p;
+    EXPECT_FLOAT_EQ( p.x , -0.5 );
+    EXPECT_FLOAT_EQ( p.y, 0.5);
+    EXPECT_FLOAT_EQ( p.z, Real(1.04040404) );
+
+
+    p = Vector3f( 256, -128, -100 );
+    p = matrix * p;
+    EXPECT_FLOAT_EQ( p.x, Real( 1) );
+    EXPECT_FLOAT_EQ( p.y, Real(-1) );
+    EXPECT_FLOAT_EQ( p.z, Real(-1) );
+
+
+    EXPECT_FLOAT_EQ( matrix[0][0], Real(2)/Real(256.-(-256.) ));
     EXPECT_FLOAT_EQ( matrix[0][1], 0 );
     EXPECT_FLOAT_EQ( matrix[0][2], 0 );
-    EXPECT_FLOAT_EQ( matrix[0][3], -1 );
+    EXPECT_FLOAT_EQ( matrix[0][3], -1. * ( 256.+(-256.)) / (256.-(-256.)) );
 
     EXPECT_FLOAT_EQ( matrix[1][0], 0 );
-    EXPECT_FLOAT_EQ( matrix[1][1], 2.f/800.f );
+    EXPECT_FLOAT_EQ( matrix[1][1], Real(2)/Real(128.-(-128.)) );
     EXPECT_FLOAT_EQ( matrix[1][2], 0 );
-    EXPECT_FLOAT_EQ( matrix[1][3], -1 );
+    EXPECT_FLOAT_EQ( matrix[1][3], -1. * (128.+(-128.)) / (128.-(-128.)) );
 
     EXPECT_FLOAT_EQ( matrix[2][0], 0 );
     EXPECT_FLOAT_EQ( matrix[2][1], 0 );
-    EXPECT_FLOAT_EQ( matrix[2][2], 1 );
-    EXPECT_FLOAT_EQ( matrix[2][3], 0 );
+    EXPECT_FLOAT_EQ( matrix[2][2], Real(2)/Real(100.-1.) );
+    EXPECT_FLOAT_EQ( matrix[2][3], (100.+1.)/(100.-1.) );
 
     EXPECT_FLOAT_EQ( matrix[3][0], 0 );
     EXPECT_FLOAT_EQ( matrix[3][1], 0 );

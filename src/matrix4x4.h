@@ -80,7 +80,8 @@ public:
     Matrix4x4& makeRotationMatrix( const Quaternion& rotation );
     Matrix4x4& makeScaleMatrix( const Vector3f& scale );
     Matrix4x4& makeTranslationMatrix( const Vector3f& translation );
-    Matrix4x4& makeOrthoMatrix( const Real width, const Real height );
+    Matrix4x4& makeProjOrthoMatrix( uint width, uint height, uint deep );
+    Matrix4x4& makeProjOrthoMatrix( Real left, Real right, Real bottom, Real top, Real near, Real far );
 
 
 

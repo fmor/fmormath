@@ -15,7 +15,7 @@ u32 Clamp(u32 value, u32 min, u32 max)
     return value;
 }
 
-i32 Clamp(i32 value, i32 min, i32 max)
+s32 Clamp(s32 value, s32 min, s32 max)
 {
     if( value < min )
         return min;
@@ -24,7 +24,7 @@ i32 Clamp(i32 value, i32 min, i32 max)
     return value;
 }
 
-float Clamp(float value, float min, float max)
+Real Clamp(Real value, Real min, Real max)
 {
     if( value < min )
         return min;

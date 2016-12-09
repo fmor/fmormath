@@ -15,6 +15,7 @@ struct Vector2f
         Real data[2];
         Real xy[2];
         Real uv[2];
+        Real wh[2];
 
         struct
         {
@@ -27,6 +28,12 @@ struct Vector2f
         {
             Real u;
             Real v;
+        };
+
+        struct
+        {
+            Real w;
+            Real h;
         };
     };
 

@@ -600,22 +600,35 @@ Matrix4x4& Matrix4x4::makeTranslationMatrix(const Vector3f& translation )
     return *this;
 }
 
-Matrix4x4& Matrix4x4::makeOrthoMatrix( const Real width, const Real height )
+Matrix4x4& Matrix4x4::makeProjOrthoMatrix( uint width, uint height, uint deep )
 {
-    m_Reals[0][0] = Real(2) / width;
+    Real rigth  =  Real(width) * 0.5;
+    Real left   =  -rigth;
+    Real top    = Real(height) * 0.5;
+    Real bottom = -top;
+    Real far    = deep + 1;
+    Real near   = 1;
+
+    return makeProjOrthoMatrix( left, rigth, bottom, top, near, far );
+}
+
+Matrix4x4& Matrix4x4::makeProjOrthoMatrix(Real left, Real right, Real bottom, Real top, Real near, Real far)
+{
+
+    m_Reals[0][0] = 2. / ( right - left);
     m_Reals[0][1] = 0;
     m_Reals[0][2] = 0;
-    m_Reals[0][3] = -1;
+    m_Reals[0][3] = -1 * ( (right + left) / ( right-left) );
 
     m_Reals[1][0] = 0;
-    m_Reals[1][1] = Real(2) / height;
+    m_Reals[1][1] = 2. / ( top - bottom );
     m_Reals[1][2] = 0;
-    m_Reals[1][3] = -1;
+    m_Reals[1][3] = -1 * ( (top + bottom) / (top - bottom) );
 
     m_Reals[2][0] = 0;
     m_Reals[2][1] = 0;
-    m_Reals[2][2] = 1;
-    m_Reals[2][3] = 0;
+    m_Reals[2][2] = 2. / (far -near);
+    m_Reals[2][3] = (far+near) / (far-near);
 
     m_Reals[3][0] = 0;
     m_Reals[3][1] = 0;

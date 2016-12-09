@@ -76,7 +76,7 @@ public:
         T           m_Data;
 
 
-        inline SearchResult( u32 index, const Vector3f& position, f32 distance, T data ) :
+        inline SearchResult( u32 index, const Vector3f& position, Real distance, T data ) :
             m_LocatorIndex( index ),
             m_Position( position ),
             m_Distance( distance ),
@@ -137,7 +137,7 @@ public:
         }
 
 
-        f32 distances[ maxResult ];
+        Real distances[ maxResult ];
         std::size_t indices[ maxResult ];
 
         for( u32 i =0; i < maxResult; ++i )
@@ -148,9 +148,9 @@ public:
 
         m_KDTree.knnSearch( &(postion.x) , maxResult, indices, distances  );
 
-        i32 cnt = 0;
+        s32 cnt = 0;
 
-        for( i32 i = 0; i < maxResult; ++i )
+        for( s32 i = 0; i < maxResult; ++i )
         {
             if( distances[i] !=  -1.0f )
             {

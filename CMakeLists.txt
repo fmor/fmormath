@@ -2,10 +2,10 @@ cmake_minimum_required(VERSION 3.0)
 
 project( fmormath )
 
-set( CMAKE_VERBOSE_MAKEFILE	True	CACHE BOOL "Enable verbose makefile" FORCE )
 set( FMOR_ENABLE_TESTS		False	CACHE BOOL "Enable tests" )
 set( FMOR_BUILD_STATIC		True	CACHE BOOL "Build static library" )
 
+set( CMAKE_VERBOSE_MAKEFILE	false )
 
 #####################################
 ## Compilation

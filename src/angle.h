@@ -9,16 +9,5 @@ enum AngleUnit
 
 
 
-class Radian
-{
-
-};
-
-
-class Degree
-{
-
-};
-
 
 }
