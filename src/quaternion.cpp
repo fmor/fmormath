@@ -13,11 +13,11 @@ const Quaternion Quaternion::ZERO( 0, 0, 0, 0 );
 
 Quaternion::Quaternion( Real radian, const Vector3f& axis )
 {
-#ifdef _DEBUG_
-    const Real d =  1.0 - axis.length();
-    if( d > Constants::EPSILON  )
-        throw;
-#endif
+//#ifdef _DEBUG_
+//    const Real d =  1.0 - axis.length();
+//    if( d > Constants::EPSILON  )
+//        throw;
+//#endif
 
     const Real half_radian = radian * 0.5;
     const Real _cos = std::cos( half_radian );

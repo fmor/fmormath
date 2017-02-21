@@ -15,6 +15,10 @@ Matrix is row major, you need to set transpose flag when passed to opengl unifor
 
 glUniformMatrix4fv( uMVP, 1, **GL_TRUE**, mvp.getPtr() );
 
+### OpenGL ES2
+
+glUniformMatrix4fv( uMVP, 1, **GL_FALSE**, mvp.transpose().getPtr() );
+
 
 ## CMake Settings
 

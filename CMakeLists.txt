@@ -6,19 +6,19 @@ set( FMOR_ENABLE_TESTS		false	CACHE BOOL "Enable tests" )
 set( FMOR_BUILD_STATIC		true	CACHE BOOL "Build static library" )
 set( FMOR_DEFINE_REAL_AS_DOUBLE false   CACHE BOOL "Define Real as double instead of float (float is defaut)")
 
-set( CMAKE_VERBOSE_MAKEFILE	false )
+set( CMAKE_VERBOSE_MAKEFILE	true )
 
 #####################################
 ## Compilation
 enable_language( CXX )
 
-set( CMAKE_CXX_FLAGS             "${CMAKE_CXX_FLAGS} -fPIC -std=c++11 -Wall -fexceptions" )
+set( CMAKE_CXX_FLAGS             "${CMAKE_CXX_FLAGS} -fPIC -std=c++11 -Wall -fno-exceptions -fno-rtti" )
 set( CMAKE_CXX_FLAGS_DEBUG       "${CMAKE_CXX_FLAGS_DEBUG} -O0 -g -D_DEBUG_" )
 set( CMAKE_CXX_FLAGS_RELEASE     "${CMAKE_CXX_FLAGS_RELEASE} -O3" )
+set( CMAKE_DEBUG_POSTFIX         "_debug" )
 
 
 
-# set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake )
 
 if( FMOR_DEFINE_REAL_AS_DOUBLE )
     add_definitions( -DDEFINE_REAL_AS_DOUBLE )
@@ -46,7 +46,6 @@ set( HEADERS
     src/matrix2x2.h
     src/matrix3x3.h
     src/matrix4x4.h
-    src/plane.h
     src/random.h
     src/rectangle.h
     src/quaternion.h
@@ -76,7 +75,6 @@ set( SOURCES
     src/matrix3x3.cpp
     src/matrix4x4.cpp
     src/mortonnumber.cpp
-    src/plane.cpp
     src/random.cpp
     src/rectangle.cpp
     src/quaternion.cpp
@@ -107,6 +105,7 @@ endif()
 if( FMOR_ENABLE_TESTS )
 
     set( TEST_SOURCES
+        test/test_include.cpp
         test/test_quaternion.cpp
         test/test_vector2f.cpp
         test/test_vector3f.cpp
@@ -121,7 +120,6 @@ if( FMOR_ENABLE_TESTS )
         test/test_random.cpp
         test/test_rectangle.cpp
         test/test_common.cpp
-        test/test_plane.cpp
     )
 
 
@@ -134,10 +132,9 @@ endif()
 
 #######################
 # For QT Creator
-add_custom_target( headers SOURCES
+add_custom_target( noop SOURCES
+    README.md
+    build.xml
     ${HEADERS}
     ${EXTERNALS_HEADERS}
-    build.xml
-    README.md
-    cmake/Findfmormath.cmake
 )

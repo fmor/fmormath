@@ -73,7 +73,6 @@ public:
         mHeight = height;
     }
 
-    bool interset( const Rectangle& other ) const;
 
 
     static const Rectangle ZERO;

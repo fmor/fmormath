@@ -2,6 +2,9 @@
 
 #include <cstring>
 
+// http://www.euclideanspace.com/maths/geometry/rotations/conversions/matrixToQuaternion/
+
+
 namespace fmormath
 {
 
@@ -384,10 +387,6 @@ void Matrix4x4::setTranslation( const Vector3f& v )
     m_Reals[2][3] = v.z;
 }
 
-void Matrix4x4::setOrientation(const Quaternion& q )
-{
-    throw;
-}
 
 void Matrix4x4::setScale( const Vector3f& v )
 {
@@ -396,32 +395,12 @@ void Matrix4x4::setScale( const Vector3f& v )
     m_Reals[2][2] = v.z;
 }
 
-void Matrix4x4::decompose(Vector3f& translation, Quaternion &orientation, Vector3f& scale ) const
-{
-    translation.x = m_Reals[0][3];
-    translation.y = m_Reals[1][3];
-    translation.z = m_Reals[2][3];
-
-    throw;
-    orientation.set( 0, 0, 0, 1 );
-
-    scale.x = m_Reals[0][0];
-    scale.y = m_Reals[1][1];
-    scale.z = m_Reals[2][2];
-
-}
 
 Vector3f Matrix4x4::getTranslation() const
 {
     return Vector3f( m_Reals[0][3], m_Reals[1][3], m_Reals[2][3] );
 }
 
-Quaternion Matrix4x4::getOrientation() const
-{
-    throw;
-// http://www.euclideanspace.com/maths/geometry/rotations/conversions/matrixToQuaternion/
-
-}
 
 Vector3f Matrix4x4::getScale() const
 {
@@ -525,7 +504,7 @@ Matrix4x4 Matrix4x4::inverseTranspose() const
     return inverse().tranpose();
 }
 
-Matrix4x4& Matrix4x4::makeRotationMatrix(const Quaternion& q )
+Matrix4x4& Matrix4x4::makeRotationMatrix( const Quaternion& q )
 {
     m_Reals[0][0] = 1.f - 2.f*q.y*q.y -2.f*q.z*q.z;
     m_Reals[0][1] = 2.f* q.x*q.y - 2.f*q.z*q.w;
@@ -550,7 +529,7 @@ Matrix4x4& Matrix4x4::makeRotationMatrix(const Quaternion& q )
     return *this;
 }
 
-Matrix4x4& Matrix4x4::makeScaleMatrix(const Vector3f& scale )
+Matrix4x4& Matrix4x4::makeScaleMatrix( const Vector3f& scale )
 {
     m_Reals[0][0] = scale.x;
     m_Reals[0][1] = 0;
@@ -602,12 +581,14 @@ Matrix4x4& Matrix4x4::makeTranslationMatrix(const Vector3f& translation )
 
 Matrix4x4& Matrix4x4::makeProjOrthoMatrix( uint width, uint height, uint deep )
 {
-    Real rigth  =  Real(width) * 0.5;
+    Real rigth  =  Real(width) * Real(0.5);
     Real left   =  -rigth;
-    Real top    = Real(height) * 0.5;
+
+    Real top    = Real(height) * Real(0.5);
     Real bottom = -top;
-    Real far    = deep + 1;
-    Real near   = 1;
+
+    Real far    = deep + 1.f;
+    Real near   = 1.f;
 
     return makeProjOrthoMatrix( left, rigth, bottom, top, near, far );
 }
@@ -615,20 +596,20 @@ Matrix4x4& Matrix4x4::makeProjOrthoMatrix( uint width, uint height, uint deep )
 Matrix4x4& Matrix4x4::makeProjOrthoMatrix(Real left, Real right, Real bottom, Real top, Real near, Real far)
 {
 
-    m_Reals[0][0] = 2. / ( right - left);
+    m_Reals[0][0] = 2.f / ( right - left);
     m_Reals[0][1] = 0;
     m_Reals[0][2] = 0;
-    m_Reals[0][3] = -1 * ( (right + left) / ( right-left) );
+    m_Reals[0][3] = -1.f * ( (right + left) / ( right-left) );
 
     m_Reals[1][0] = 0;
-    m_Reals[1][1] = 2. / ( top - bottom );
+    m_Reals[1][1] = 2.f / ( top - bottom );
     m_Reals[1][2] = 0;
-    m_Reals[1][3] = -1 * ( (top + bottom) / (top - bottom) );
+    m_Reals[1][3] = -1.f * ( (top + bottom) / (top - bottom) );
 
     m_Reals[2][0] = 0;
     m_Reals[2][1] = 0;
-    m_Reals[2][2] = 2. / (far -near);
-    m_Reals[2][3] = (far+near) / (far-near);
+    m_Reals[2][2] = -2.f / (far -near);
+    m_Reals[2][3] = -1.f * (far+near) / (far-near);
 
     m_Reals[3][0] = 0;
     m_Reals[3][1] = 0;
@@ -638,22 +619,20 @@ Matrix4x4& Matrix4x4::makeProjOrthoMatrix(Real left, Real right, Real bottom, Re
     return *this;
 }
 
-void Matrix4x4::translate(Real x, Real y, Real z)
+void Matrix4x4::translate( const Vector3f& v )
 {
-    m_Reals[0][3] += x;
-    m_Reals[1][3] += y;
-    m_Reals[2][3] += z;
+    m_Reals[0][3] += v.x;
+    m_Reals[1][3] += v.y;
+    m_Reals[2][3] += v.z;
 }
 
 void Matrix4x4::rotate( const Quaternion& quaternion )
 {
-    throw;
+    Matrix4x4 R;
+    R.makeRotationMatrix( quaternion );
+    *this = R * *this;
 }
 
-void Matrix4x4::rotate( Real degrees, const Vector3f& axis )
-{
-    throw;
-}
 
 
 

@@ -45,6 +45,9 @@ u32 NextPowerOf2( u32 value )
 
 
 
+
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wstrict-aliasing"
 // https://fr.wikipedia.org/wiki/Racine_carr%C3%A9e_inverse_rapide
 Real Q_rsqrt( Real number )
 {
@@ -62,6 +65,7 @@ Real Q_rsqrt( Real number )
 
     return y;
 }
+#pragma GCC diagnostic pop
 
 
 

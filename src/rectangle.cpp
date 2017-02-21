@@ -7,10 +7,10 @@ const Rectangle Rectangle::ZERO(0,0,0,0);
 const Rectangle Rectangle::UNIT(1,1,1,1);
 
 
-bool Rectangle::interset( const Rectangle& other ) const
-{
-    throw;
-}
+//bool Rectangle::interset( const Rectangle& other ) const
+//{
+//    throw;
+//}
 
 
 }

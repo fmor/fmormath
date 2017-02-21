@@ -53,7 +53,6 @@ public:
 
 
     void setTranslation( const Vector3f& v3 );
-    void setOrientation( const Quaternion& q );
     void setScale( const Vector3f& v );
 
     inline void setTranslation( Real x, Real y, Real z ) { setTranslation( Vector3f(x,y,z) ); }
@@ -61,10 +60,8 @@ public:
 
 
 
-    void decompose( Vector3f& translation, Quaternion& orientation, Vector3f& scale ) const;
 
     Vector3f getTranslation() const;
-    Quaternion getOrientation() const;
     Vector3f getScale() const;
 
 
@@ -76,8 +73,10 @@ public:
     Matrix4x4 inverseTranspose() const;
 
 
+    // make*** //
     inline Matrix4x4& makeScaleMatrix( Real x, Real y, Real z )         { return makeScaleMatrix( Vector3f(x,y,z) ); }
     inline Matrix4x4& makeTranslationMatrix( Real x, Real y, Real z )   { return makeTranslationMatrix( Vector3f(x,y,z)); }
+    inline Matrix4x4& makeRotationMatrix( Real radian, const Vector3f& axis ){ return makeRotationMatrix(Quaternion(radian,axis)); }
 
 
     Matrix4x4& makeRotationMatrix( const Quaternion& rotation );
@@ -88,14 +87,13 @@ public:
 
 
 
-
-    inline void translate( const Vector3f& v3 ) { translate( v3.x, v3.y, v3.z); }
-    void translate( Real x, Real y, Real z );
-
-
-
+    void translate( const Vector3f& translation );
     void rotate( const Quaternion& quaternion );
-    void rotate( Real degrees, const Vector3f& axis );
+
+
+    inline void rotate( Real radian, const Vector3f& axis ) { rotate(Quaternion(radian,axis) ); }
+    inline void translate(  Real x, Real y, Real z ) { translate(Vector3f(x,y,z)); }
+
 
     static const Matrix4x4 ZERO;
     static const Matrix4x4 IDENTITY;
