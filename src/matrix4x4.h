@@ -84,6 +84,7 @@ public:
     Matrix4x4& makeTranslationMatrix( const Vector3f& translation );
     Matrix4x4& makeProjOrthoMatrix( uint width, uint height, uint deep );
     Matrix4x4& makeProjOrthoMatrix( Real left, Real right, Real bottom, Real top, Real near, Real far );
+    Matrix4x4& makeProj2DMatrix( Real width, Real height );
 
 
 

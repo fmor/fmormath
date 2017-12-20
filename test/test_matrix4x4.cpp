@@ -513,6 +513,75 @@ TEST( Matrix4x4, makeProjOrthoMatrix  )
     EXPECT_FLOAT_EQ( v.z, 0 );
 
 }
+TEST( Matrix4x4, makeProjOrthoMatrix2  )
+{
+    Matrix4x4 P;
+    P.makeProjOrthoMatrix( 512, 256, 100 );
+
+
+    Vector3f v;
+
+    v = Vector3f( 0, 0, -1 );
+    v = P * v;
+    EXPECT_FLOAT_EQ( v.x, 0 );
+    EXPECT_FLOAT_EQ( v.y, 0);
+    EXPECT_FLOAT_EQ( v.z, -1 );
+
+    v = Vector3f( 0, 0, -101 );
+    v = P * v;
+    EXPECT_FLOAT_EQ( v.x, 0 );
+    EXPECT_FLOAT_EQ( v.y, 0);
+    EXPECT_FLOAT_EQ( v.z, 1 );
+
+
+    v = Vector3f( -256, 0, -51 );
+    v = P * v;
+    EXPECT_FLOAT_EQ( v.x, -1 );
+    EXPECT_FLOAT_EQ( v.y, 0);
+    EXPECT_FLOAT_EQ( v.z, 0 );
+
+    v = Vector3f( 256, 0, -51 );
+    v = P * v;
+    EXPECT_FLOAT_EQ( v.x, 1 );
+    EXPECT_FLOAT_EQ( v.y, 0);
+    EXPECT_FLOAT_EQ( v.z, 0 );
+
+    v = Vector3f( 0, -128, -51 );
+    v = P * v;
+    EXPECT_FLOAT_EQ( v.x, 0 );
+    EXPECT_FLOAT_EQ( v.y,-1 );
+    EXPECT_FLOAT_EQ( v.z, 0 );
+
+    v = Vector3f( 0, 128, -51 );
+    v = P * v;
+    EXPECT_FLOAT_EQ( v.x, 0 );
+    EXPECT_FLOAT_EQ( v.y, 1 );
+    EXPECT_FLOAT_EQ( v.z, 0 );
+
+}
+
+TEST( Matrix4x4, makeProj2DMatrix )
+{
+    Matrix4x4 M;
+    Vector3f v;
+
+    M.makeProj2DMatrix( 400, 800 );
+    v.set( 200, 400, -1  );
+    v = M * v;
+    EXPECT_EQ( v, Vector3f( 0,0,-1) );
+
+    M.makeProj2DMatrix( 400, 800 );
+    v.set( 0, 400, -51  );
+    v = M * v;
+    EXPECT_EQ( v, Vector3f( -1, 0, 0) );
+
+    M.makeProj2DMatrix( 400, 800 );
+    v.set( 400, 800, -101 );
+    v = M * v;
+    EXPECT_EQ( v, Vector3f( 1, -1, 1) );
+}
+
+
 
 TEST( Matrix4x4, getTranslation )
 {

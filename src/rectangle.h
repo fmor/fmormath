@@ -5,73 +5,58 @@
 
 namespace fmormath {
 
-
-class Rectangle
+struct Rectangle
 {
+    // Top Left point
+    Real m_X;
+    Real m_Y;
 
-    Vector2f m_TopLeft;
+    Real m_Width;
+    Real m_Height;
 
-    float mWidth;
-    float mHeight;
 
-public:
-
-    inline Rectangle() :
-        m_TopLeft( Vector2f(0,0) ),
-        mWidth( 0 ),
-        mHeight( 0 )
+    inline Rectangle()
     {}
 
-    inline Rectangle( float x, float y, float width, float height ) :
-        m_TopLeft( Vector2f(x,y) ),
-        mWidth( width ),
-        mHeight( height )
+    inline Rectangle( Real x, Real y, Real width, Real height ) :
+        m_X(x),
+        m_Y(y),
+        m_Width( width ),
+        m_Height( height )
     {}
 
 
-
-    inline const Vector2f& getTopLeft() const { return m_TopLeft; }
-    inline float getWidth()   const { return mWidth; }
-    inline float getHeight()  const { return mHeight; }
-
-
-
-
-
-    inline void set( float x, float y, float width, float height )
+    inline void setPosition( Real x, Real y )
     {
-        m_TopLeft.set( x, y );
-
-        mWidth =  ( width  < 0 ) ? 0 : width;
-        mHeight = ( height < 0 ) ? 0 : height;
+        m_X = x;
+        m_Y = y;
+    }
+    inline void setSize( Real w, Real h )
+    {
+        m_Width  = w;
+        m_Height = h;
     }
 
-    inline float ratio() const { return float(mWidth)/float(mHeight); }
-    inline float area() const { return mWidth * mHeight; }
 
 
-
-    inline bool isPointInside( float x, float y ) const
+    inline void set( Real x, Real y, Real w, Real h )
     {
-        if( x <  m_TopLeft.x )           return false;
-        if( x > (m_TopLeft.x+mWidth) )   return false;
-
-        if( y >  m_TopLeft.y )           return false;
-        if( y < (m_TopLeft.y-mHeight) )   return false;
-
-        return true;
+        m_X = x;
+        m_Y = y;
+        m_Width  = w;
+        m_Height = h;
     }
 
-    inline void setTopLeft( float x, float y )
-    {
-        m_TopLeft.x = x;
-        m_TopLeft.y = y;
-    }
-    inline void setDimensions( float width, float height )
-    {
-        mWidth = width;
-        mHeight = height;
-    }
+    inline Real ratio() const { return Real(m_Width)/Real(m_Height); }
+    inline Real area() const { return m_Width * m_Height; }
+
+
+    bool isInside( Real x, Real y ) const;
+
+    Rectangle& operator =( const Rectangle& other );
+    bool operator ==( const Rectangle& other ) const;
+    bool operator !=( const Rectangle& other ) const;
+
 
 
 

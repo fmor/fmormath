@@ -6,7 +6,7 @@ set( FMOR_ENABLE_TESTS		false	CACHE BOOL "Enable tests" )
 set( FMOR_BUILD_STATIC		true	CACHE BOOL "Build static library" )
 set( FMOR_DEFINE_REAL_AS_DOUBLE false   CACHE BOOL "Define Real as double instead of float (float is defaut)")
 
-set( CMAKE_VERBOSE_MAKEFILE	true )
+set( CMAKE_VERBOSE_MAKEFILE	OFF )
 
 #####################################
 ## Compilation
@@ -15,7 +15,7 @@ enable_language( CXX )
 set( CMAKE_CXX_FLAGS             "${CMAKE_CXX_FLAGS} -fPIC -std=c++11 -Wall -fno-exceptions -fno-rtti" )
 set( CMAKE_CXX_FLAGS_DEBUG       "${CMAKE_CXX_FLAGS_DEBUG} -O0 -g -D_DEBUG_" )
 set( CMAKE_CXX_FLAGS_RELEASE     "${CMAKE_CXX_FLAGS_RELEASE} -O3" )
-set( CMAKE_DEBUG_POSTFIX         "_debug" )
+#set( CMAKE_DEBUG_POSTFIX         "_debug" )
 
 
 
@@ -129,12 +129,3 @@ if( FMOR_ENABLE_TESTS )
     target_link_libraries(runtests fmormath ${GTEST_BOTH_LIBRARIES} pthread )
 endif()
 
-
-#######################
-# For QT Creator
-add_custom_target( noop SOURCES
-    README.md
-    build.xml
-    ${HEADERS}
-    ${EXTERNALS_HEADERS}
-)

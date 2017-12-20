@@ -619,6 +619,32 @@ Matrix4x4& Matrix4x4::makeProjOrthoMatrix(Real left, Real right, Real bottom, Re
     return *this;
 }
 
+Matrix4x4 &Matrix4x4::makeProj2DMatrix(Real width, Real height)
+{
+    m_Reals[0][0] =  2.f / width;
+    m_Reals[0][1] =  0;
+    m_Reals[0][2] =  0;
+    m_Reals[0][3] = -1;
+
+    m_Reals[1][0] =  0;
+    m_Reals[1][1] = -2.f / height;
+    m_Reals[1][2] =  0;
+    m_Reals[1][3] =  1;
+
+    m_Reals[2][0] =  0;
+    m_Reals[2][1] =  0;
+    m_Reals[2][2] = -2.f / 100.f;
+    m_Reals[2][3] = -1.f *(102.f) / (100.f);
+
+    m_Reals[3][0] = 0;
+    m_Reals[3][1] = 0;
+    m_Reals[3][2] = 0;
+    m_Reals[3][3] = 1;
+
+    return *this;
+
+}
+
 void Matrix4x4::translate( const Vector3f& v )
 {
     m_Reals[0][3] += v.x;
