@@ -2,8 +2,8 @@ cmake_minimum_required(VERSION 3.0)
 
 project( fmormath )
 
-set( FMOR_ENABLE_TESTS		false	CACHE BOOL "Enable tests" )
-set( FMOR_BUILD_STATIC		true	CACHE BOOL "Build static library" )
+set( FMOR_ENABLE_TESTS          false	CACHE BOOL "Enable tests" )
+set( FMOR_BUILD_STATIC          true	CACHE BOOL "Build static library" )
 set( FMOR_DEFINE_REAL_AS_DOUBLE false   CACHE BOOL "Define Real as double instead of float (float is defaut)")
 
 set( CMAKE_VERBOSE_MAKEFILE	OFF )
